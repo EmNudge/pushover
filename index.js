@@ -4,9 +4,6 @@ const { getCommands, setAdminFile } = require('./usefulFunctions.js');
 const reminder = require('./reminder.js');
 const runCommand = require('./runCommand.js');
 
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/pushover', { useNewUrlParser: true });
-
 const client = new Discord.Client();
 client.commands = getCommands();
 
