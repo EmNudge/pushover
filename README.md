@@ -1,2 +1,13 @@
-# pushover
-A discord bot for team management with a unique command syntax
+# KAFF-BOT
+
+After pulling:
+```
+npm install discordjs
+npm install firebase --save
+```
+
+things like the discord token and firebase api key will be kept in 
+```
+config.json
+```
+which won't be included in this git repo

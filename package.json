@@ -1,0 +1,24 @@
+{
+  "name": "kaff-bot",
+  "version": "1.0.0",
+  "description": "bot for kaff software",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^11.4.2",
+    "firebase": "^5.8.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "main": "index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/kaff-software/kaff-bot.git"
+  },
+  "author": "EmNudge & Thomas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/kaff-software/kaff-bot/issues"
+  },
+  "homepage": "https://gitlab.com/kaff-software/kaff-bot#readme"
+}
