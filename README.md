@@ -3,6 +3,7 @@
 After pulling:
 ```
 npm install discordjs
+npm install node-cron --save
 npm install firebase --save
 ```
 

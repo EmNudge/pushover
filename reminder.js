@@ -1,38 +1,55 @@
+const cron = require("node-cron");
 const { progressReports } = require("./firebaseConfig.js");
 
-function reminder() {
+function reminder(client) {
+    //called so that it will be run on startup
+    sendMsgs(client);
 
-    //02/14/19 9AM UTC = 1550134800
-    //02/15/19 9AM UTC = 1550221200
-    //24 hour period difference = 86400
+    //on the 0th minute of the 0th hour every day, send the messages
+    cron.schedule('0 0 * * *', () => sendMsgs(client), { timezone: "America/New_York" });
 }
 
-//gets closest upcoming unix time corresponding to the day of the week
-//if the time has passed, even if it's on the same day, it will return a day from the next week
-function getUnixTimeStamp(dayOfWeek = 'monday') {
-    //turn text into number for use in if statement
-    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    let dayNum;
-    for (const [index, day] of days.entries()) {
-        if (day.includes(dayOfWeek.toLowerCase())) dayNum = index;
+async function sendMsgs(client) {
+    const servers = await progressReports.get();
+    for (const server of servers.docs) {
+        //checking to see if it has been a week and add 1 to the week counter if so
+        const datePortions = server.data().lastUpdated.split(' ');
+        datePortions[2] = parseInt(datePortions[2]) + 7;
+        const hasBeenAWeek = new Date(datePortions.join(' ')).getDate() < new Date().getDate();
+        if (hasBeenAWeek) {
+            await progressReports.doc(server.id).set({
+                week: server.data().week + 1
+            }, { merge: true })
+        }
+
+        //get members from the server
+        const members = await progressReports.doc(server.id).collection('members').get();
+        for (const member of members.docs) {
+            //if it isn't the day to remind the user about progress reports, continue to next person
+            const isDayToRemind = member.data().day.includes(Date().split(' ')[0]);
+            if (!isDayToRemind) {
+                if (member.data().reminded) {
+                    await progressReports.doc(server.id).collection('members').doc(member.id).set({ 
+                        reminded: false 
+                    }, { merge: true });
+                }    
+                continue;
+            } else if (member.data().reminded) {
+                continue;
+            }
+
+            const userToMessage = await client.fetchUser(member.id);
+            userToMessage.send(`It's ${member.data().day}!\nSend a progress report to the server of **${server.data().name}** with the id of **${server.id}** by using the command \`PR.send(serverID[, message/number])\``);
+
+            //let the DB know that we've reminded them for today
+            await progressReports.doc(server.id).collection('members').doc(member.id).set({ reminded: true }, { merge: true });
+        }
     }
 
-    const currentDate = new Date();
-    const dateToGet = {
-        year: currentDate.getFullYear(),
-        month: currentDate.getMonth(),
-        dayOfWeek: currentDate.getDay(),
-        dayOfMonth: currentDate.getDate(),
-    }
-
-    //dayOfMonth - dayOfWeek = sunday this week. Add on the dayNum and you get this week's day
-    let dayOfMonth = dateToGet.dayOfMonth - dateToGet.dayOfWeek + dayNum
-    //if the goal day is less than the current day when converted to ms, the day happens next week
-    if (new Date(dateToGet.year, dateToGet.month, dayOfMonth).valueOf() < Date.now()) {
-        dayOfMonth += 7
-    }
-
-    return new Date(dateToGet.year, dateToGet.month, dayOfMonth).valueOf()
+    console.log('-----------------');
+    console.log('Reminders have been sent out for the day with the date of');
+    console.log(Date());
+    console.log('-----------------');
 }
 
 module.exports = reminder;

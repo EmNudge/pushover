@@ -10,7 +10,8 @@ module.exports = {
 
 		await progressReports.doc(id).set({
 			name: nameToSet,
-			week: 1
+			week: 1,
+			lastUpdated: Date()
 		});
 		
 		message.channel.send(`${message.author} This server has been initialized for Progress Reports with the name of **${nameToSet}**`);

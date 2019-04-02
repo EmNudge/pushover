@@ -1,6 +1,11 @@
 const Discord = require('discord.js');
 const { token } = require("./config.json");
-const { getCommands, getCommandArgs } = require('./usefulFunctions.js');
+const { getCommands, setAdminFile } = require('./usefulFunctions.js');
+const reminder = require('./reminder.js');
+const runCommand = require('./runCommand.js');
+
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/pushover', { useNewUrlParser: true });
 
 const client = new Discord.Client();
 client.commands = getCommands();
@@ -10,22 +15,17 @@ client.on('ready', () => {
 
   //idk man, trying to advertise a bit.
   client.user.setActivity("my code", { type: "STREAMING", url: "https://www.twitch.tv/emnudge" });
+
+	setAdminFile();
+  reminder(client);
 });
 
 client.on('message', async message => {
-    const args = getCommandArgs(message.content, client.commands);
-    //if command isn't a function or has invalid syntax, ignore
-    if (typeof args !== "object") return;
-
-    const funcName = message.content.slice(0, message.content.indexOf('('));
-    try {
-        client.commands.get(funcName).execute(message, args, client);
-    } catch (error) {
-        console.error(error);
-        message.reply('Whoops! Error occurred!');
-    }
+	await runCommand(message, client);
 });
 
 client.on('error', console.error);
 
+//DISCORD LOGIN NOT INCLUDED IN THIS GIT
+//GIT YOUR OWN (sorry, bad pun, my bad)
 client.login(token);

@@ -28,7 +28,7 @@ module.exports = {
 		//add createdAt and EditedAt to footer
 		let createdMessage = 'created at ' + quotedPost.createdAt;
 		if (quotedPost.editedAt) createdMessage += ' and edited at ' + quotedPost.editedAt;
-		quoteEmbed.setFooter(createdMessage, 'http://simpleicon.com/wp-content/uploads/clock-time-1.png');
+		quoteEmbed.setFooter(createdMessage, 'https://i.imgur.com/RBDAlpD.png');
 
 		message.channel.send(quoteEmbed);
 	},

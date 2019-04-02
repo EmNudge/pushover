@@ -15,16 +15,22 @@ module.exports = {
 
         let pollResults = '';
         let totalReactionCount = 0;
+        const duplicatedNames = [];
         const quotedPost = await quotedChannel.fetchMessage(postID);
-        quotedPost.reactions.map(reaction => {
+        quotedPost.reactions.map(async reaction => {
             pollResults += `\n${reaction.count} of ${reaction.emoji}`
             totalReactionCount += reaction.count;
+            const users = await reaction.fetchUsers();
+            users.map(user => {
+                duplicatedNames.push(user.id)
+            })
+            console.log(duplicatedNames)
         });
 
         const winners = getMax(quotedPost.reactions, 'count');
         pollResults += winners.size > 1 ? '\n\nTied:' : '\n\nWinner:';
         winners.map(reaction => {
-            pollResults += `\n${reaction.emoji} with ${reaction.count} votes - ${reaction.count/totalReactionCount*100}% of the total`;
+            pollResults += `\n${reaction.emoji} with ${reaction.count} votes - ${parseInt(reaction.count/totalReactionCount*10000)/100}% of the total`;
         })
 
         pollResultsEmbed.setTitle('Poll Results');

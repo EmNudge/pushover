@@ -1,7 +1,7 @@
 const { promisify } = require('util');
 const fs = require('fs');
 const Discord = require('discord.js');
-const { admin } = require('./firebaseConfig.js');
+const { admins } = require('./firebaseConfig.js');
 
 //returns a discord collection of all commands
 function getCommands() {
@@ -48,23 +48,25 @@ function isNumber(string) {
 
 async function setAdminFile() {
     const readFile = promisify(fs.readFile);
+    const writeFile = promisify(fs.writeFile);
+    const obj = await readFile('./admins.json');
+    const adminObj = JSON.parse(obj);
 
-    const adminObj = {};
-    const servers = await admin.get();
-    for (const server of servers) {
+    const servers = await admins.get();
+    for (const server of servers.docs) {
         adminObj[server.id] = { members: { users: {}, roles: {} }, commands: {} };
         //add users to admin object in members key
-        const users = await admin.doc(server.id).collection('users').get();
+        const users = await admins.doc(server.id).collection('users').get();
         for (const user of users.docs) {
             adminObj[server.id].members.users[user.id] = user.data().name;
         }
         //add roles to admin object in members key
-        const roles = await admin.doc(server.id).collection('roles').get();
+        const roles = await admins.doc(server.id).collection('roles').get();
         for (const role of roles.docs) {
             adminObj[server.id].members.roles[role.id] = role.data().name;
         }
         //add commands to admin object
-        const commands = await admin.doc(server.id).collection('commands').get();
+        const commands = await admins.doc(server.id).collection('commands').get();
         for (const command of commands.docs) {
             adminObj[server.id].commands[command.id] = {
                 description: command.data().description,
@@ -72,24 +74,8 @@ async function setAdminFile() {
             }
         }
     }
-}
 
-function getCommandArgs(message, collection) {
-    if (!message.split(' ')[0].includes('(') || !message.endsWith(')')) {
-        return 'INVALID SYNTAX';
-    }
-    
-    //get the string until the first '(' which should be the function name
-    const funcName = message.slice(0, message.indexOf('('));
-    //get everything inside the () and split it by commas
-    const args = message.slice(message.indexOf('(') + 1, -1).split(',');
-    //cleaning up arguments by removing the whitespace at the beginning of parameters
-	args.map((unusedVal, index) => args[index] = args[index].replace(/^\s+/g, ''));
-
-    //if the command has valid syntax, but isn't a valid command
-    if (!collection.has(funcName)) return 'INVALID FUNCTION';
-
-    return args;
+    await writeFile('./admins.json', JSON.stringify(adminObj));
 }
 
 //function to return an array of objects with the highest value
@@ -104,6 +90,5 @@ module.exports = {
     isNumber,
     getCommands,
     setAdminFile,
-    getCommandArgs,
     getMax
 }

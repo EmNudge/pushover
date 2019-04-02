@@ -7,8 +7,13 @@ module.exports = {
 	async execute(message, args, client) {
     //if no first argument or no user mentions and no IDs, return
 		if (!args[0].length || (!message.mentions.users && !/^\d+$/.args[0].split(' ')[0])) {
-			message.channel.send(`${message.author} that command must have the syntax: \n \`addUserToPR(\@user \@user ...[, \@role \@role ...])\` or \`addUserToPR(userID userID ...[, roleID roleID ...])\``);
+			message.channel.send(`${message.author} that command must have the syntax: \n \`PR.addUser(\@user \@user ...[, \@role \@role ...])\` or \`PR.addUser(userID userID ...[, roleID roleID ...])\``);
 			return;
+    }
+    const serverDoc = await progressReports.doc(message.guild.id).get();
+    if (!serverDoc.exists) {
+      message.channel.send(`${message.author} you must first use \`PR.init([server name])\``)
+      return;
     }
 
     const users = [],
@@ -63,7 +68,7 @@ module.exports = {
 		
     message.channel.send(`${message.author} Added ${users.map(user => `*${user.username + '#' + user.discriminator}*`).join(', ')} to DB with ${rolesList.length ? 'the role(s) of ' + rolesList.map(role => `*${role.name}*`).join(', ') : 'no roles attached'}`);
     for (const user of users) {
-      user.send(`Hey! I am Pushover, a bot built for team organization.\n\nYou have just been added to a \`Progress Reports\` list for the server **${message.guild}**.\nYou will be asked to provide reports of progress each week on Monday. You can change this day by using the \`changeDay(serverID, dayOfWeek)\` command. \n\nAll commands sent via PMs will require a server ID. The server ID for ${message.guild} is **${message.guild.id}**.`);
+      user.send(`Hey! I am Pushover, a bot built for team organization.\n\nYou have just been added to a \`Progress Reports\` list for the server **${message.guild}**.\nYou will be asked to provide reports of progress each week on Monday. You can change this day by using the \`PR.changeDay(serverID, dayOfWeek)\` command. \n\nAll commands sent via PMs will require a server ID. The server ID for ${message.guild} is **${message.guild.id}**.`);
     }
 	},
 };
