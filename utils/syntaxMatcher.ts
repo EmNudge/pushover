@@ -1,10 +1,10 @@
-
+import { Type, Param } from './typeDefinitions'
 
 /** checks if parameter length is within the allowed range */
 function areParamsInRange(syntax: string, length: number): boolean {
   const maxParams = syntax.length > 0 ? syntax.split(',').length : 0;
   const minParams = syntax.split(',').length - (syntax.includes('[') ? syntax.split('[').length + 1 : 1);
-  const paramsInRange = minParams < length && length < maxParams;
+  const paramsInRange = minParams <= length && length <= maxParams;
   return paramsInRange;
 }
 
@@ -19,4 +19,12 @@ function paramsMatchSyntax(types: Param[], syntax: string): boolean {
   }
 
   return true;
+}
+
+
+
+export default paramsMatchSyntax;
+
+export {
+  areParamsInRange
 }

@@ -1,17 +1,19 @@
+import { Type, Param } from './typeDefinitions'
+
 function getTypeOfValue(value: string): Type {
   const isFunction: boolean = value.split(' ')[0].includes('(') && value.slice(-1) === ')';
   if (isFunction) return Type.Function;
 
-  const isNumber = /^\d+$/.test(value)
+  const isNumber = /^\d+$/.test(value);
   if (isNumber) return Type.Number;
           
-  return Type.String
+  return Type.String;
 }
 
 function getParam(value: string): Param {
   return { 
     type: getTypeOfValue(value), 
-    value: value.replace(/^"|^'|'$|"$/g, '')
+    value: value.replace(/^"|^'|'$|"$/g, ''),
   }
 }
 
@@ -48,3 +50,5 @@ function getParams(paramStr: string): Param[] {
 
   return types;
 }
+
+export default getParams;

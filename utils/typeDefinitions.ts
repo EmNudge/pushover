@@ -1,10 +1,10 @@
-enum Type {
+export enum Type {
   String,
   Function,
   Number,
 }
 
-interface Param {
+export interface Param {
   type: Type,
   value: string,
 }
