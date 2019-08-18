@@ -28,13 +28,18 @@ describe('checks if parameters match a given syntax', function() {
   })
 
   it('matches the syntax', function() {
-    const params1 = getParams('42234, hello, function()');
-    const matchSyntax1 = paramsMatchSyntax(params1, 'num, string, func()');
+    const params = getParams('42234, hello, function()');
     
+    const matchSyntax1 = paramsMatchSyntax(params, 'num: number, str: string, func: function');
     expect(matchSyntax1).equal(true);
     
-    const params2 = getParams('42234, hello, function()');
-    const matchSyntax2 = paramsMatchSyntax(params2, 'num, func(), func()');
+    const matchSyntax2 = paramsMatchSyntax(params, 'num: number, func: function, func: function');
     expect(matchSyntax2).equal(false);
+
+    const matchSyntax3 = paramsMatchSyntax(params, 'num: number, str1: string, func: function, str2: string');
+    expect(matchSyntax3).equal(false);
+
+    const matchSyntax4 = paramsMatchSyntax(params, 'num: number, str: string');
+    expect(matchSyntax4).equal(false);
   }); 
 });
