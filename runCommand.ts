@@ -27,7 +27,7 @@ async function isAdminCommand(command, serverID) {
     return !!adminObj[serverID] && !!adminObj[serverID].commands[command];
 }
 
-function getTypes(params) {
+function getTypes(params: string) {
 	const types  = [];
 	
 	let startStr = 0,
@@ -36,9 +36,10 @@ function getTypes(params) {
 
 	for (const [index, char] of params.split('').entries()) {
         //if the argument is over and there's no odd amount of closures
-        const isSeparater = char === ',' || index === params.length - 1;
-        const evenQuotes = quotes % 2 === 0 || char === '"' || char === "'";
-        const evenParentheses = parentheses % 2 === 0 || char === ')';
+        const isSeparater: boolean = char === ',' || index === params.length - 1;
+        const evenQuotes: boolean = quotes % 2 === 0 || char === '"' || char === "'";
+        const evenParentheses: boolean = parentheses % 2 === 0 || char === ')';
+
 		if (isSeparater && evenQuotes && evenParentheses) {
             //use whole rest of string if we're up to the last character (to include index + 1)
             let value = params.slice(startStr, index);
@@ -52,7 +53,6 @@ function getTypes(params) {
 
 			types.push({ type, value: value.replace(/^"|^'|'$|"$/g, '') });
 			startStr = index + 1;
-			currentType = 'string';
 			continue;
         } else if (index === params.length - 1) {
             //if there's an invalid amount of quotes or parentheses
@@ -67,7 +67,7 @@ function getTypes(params) {
 	return types;
 }
 
-function typesAreValid(types, syntax) {
+function typesAreValid(types, syntax): boolean {
     //if types returned as an error
     if (typeof types === 'string') return false;
 
@@ -96,7 +96,7 @@ async function runCommand(message, client) {
     if (!client.commands.has(funcName)) return;
 
     //get everything between first '(' and last ')' and pass it to getTypes()
-    const args = getTypes(message.content.slice(message.content.indexOf('(') + 1, -1));
+    const args: any = getTypes(message.content.slice(message.content.indexOf('(') + 1, -1));
 
     //check if the command is admin restricted and user is an admin
     const isAdmin = await userIsAdmin(message);
