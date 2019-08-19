@@ -34,30 +34,44 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
-var getCommands = require('../usefulFunctions.js').getCommands;
-var RichEmbed = require('discord.js').RichEmbed;
-exports["default"] = {
-    name: 'help',
-    description: 'returns the descriptor for a command',
-    syntax: 'commandName',
-    execute: function (message, args) {
-        return __awaiter(this, void 0, void 0, function () {
-            var commands, commandName, _a, description, syntax, meetingEmbed, embedDescription;
-            return __generator(this, function (_b) {
-                commands = getCommands();
-                commandName = args[0].includes('(') ? args[0].substring(0, args[0].indexOf('(')) : args[0];
-                if (!commands.has(commandName)) {
-                    message.channel.send(message.author + " That is not a valid command");
-                    return [2 /*return*/];
-                }
-                _a = commands.get(commandName), description = _a.description, syntax = _a.syntax;
-                meetingEmbed = new RichEmbed().setColor('#1C8CFF');
-                embedDescription = "**description**: " + description + "\n**syntax**: " + commandName + "(" + syntax + ")";
-                meetingEmbed.setTitle(commandName).setDescription(embedDescription);
-                message.channel.send(meetingEmbed);
-                return [2 /*return*/];
-            });
-        });
-    }
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+exports.__esModule = true;
+var getArgs_1 = __importDefault(require("./getArgs"));
+var syntaxMatcher_1 = __importDefault(require("./syntaxMatcher"));
+var adminRestrictor_1 = __importDefault(require("./adminRestrictor"));
+function runCommand(message, client, commands) {
+    return __awaiter(this, void 0, void 0, function () {
+        var funcName, args, syntax;
+        return __generator(this, function (_a) {
+            //if it's not in command syntax, ignore
+            if (!message.content.split(' ')[0].includes('(') || !message.content.endsWith(')'))
+                return [2 /*return*/];
+            funcName = message.content.slice(0, message.content.indexOf('('));
+            //if the command name isn't valid, ignore
+            if (!commands.has(funcName))
+                return [2 /*return*/];
+            args = getArgs_1["default"](message.content.slice(message.content.indexOf('(') + 1, -1));
+            if (adminRestrictor_1["default"](funcName, message)) {
+                message.channel.send(message.author + ' Unfortunately that command is admin restricted and you are not listed as an admin');
+                return [2 /*return*/];
+            }
+            syntax = commands.get(funcName).syntax;
+            if (!syntaxMatcher_1["default"](args, syntax)) {
+                message.reply("Invalid syntax. Please use `" + funcName + "(" + syntax + ")`");
+                return [2 /*return*/];
+            }
+            //if all tests pass, try to run the command
+            try {
+                commands.get(funcName).execute(message, args.map(function (arg) { return arg.value; }), client);
+            }
+            catch (error) {
+                console.error(error);
+                message.reply('Whoops! Error occurred!');
+            }
+            return [2 /*return*/];
+        });
+    });
+}
+exports["default"] = runCommand;

@@ -4,7 +4,7 @@ export enum Type {
   Number,
 }
 
-export interface Param {
+export interface Arg {
   type: Type,
   value: string,
 }

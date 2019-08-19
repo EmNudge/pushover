@@ -1,34 +1,6 @@
 const { promisify } = require('util');
 const fs = require('fs');
-const Discord = require('discord.js');
 const { admins } = require('./firebaseConfig.js');
-
-//returns a discord collection of all commands
-function getCommands() {
-    const commandsCollection = new Discord.Collection();
-
-    //recursive algorithm to loop through folders
-    function addCommands(fileArray, folderName = '') {
-        for (const fileName of fileArray) {
-            if (fileName.includes('.') && !fileName.endsWith('.js')) continue;
-
-            if (fileName.endsWith('.js')) {
-                const command = require('./commands/' + folderName + fileName);
-                commandsCollection.set(folderName.split('/').join('.') + command.name, command);
-                continue;
-            }
-
-            //recursively call if it's a folder
-            addCommands(
-                fs.readdirSync('./commands/' + fileName),
-                folderName + fileName + '/'
-            );
-        }
-    }
-    addCommands(fs.readdirSync('./commands/'));
-
-    return commandsCollection;
-}
 
 //returns true if only one entry in the array fulfils the function.
 //returns false if all are false or more than one are true
@@ -88,7 +60,6 @@ module.exports = {
     capitalizeFirstLetter,
     onlyOne,
     isNumber,
-    getCommands,
     setAdminFile,
     getMax
 }

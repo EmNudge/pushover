@@ -34,30 +34,59 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
-var getCommands = require('../usefulFunctions.js').getCommands;
-var RichEmbed = require('discord.js').RichEmbed;
-exports["default"] = {
-    name: 'help',
-    description: 'returns the descriptor for a command',
-    syntax: 'commandName',
-    execute: function (message, args) {
-        return __awaiter(this, void 0, void 0, function () {
-            var commands, commandName, _a, description, syntax, meetingEmbed, embedDescription;
-            return __generator(this, function (_b) {
-                commands = getCommands();
-                commandName = args[0].includes('(') ? args[0].substring(0, args[0].indexOf('(')) : args[0];
-                if (!commands.has(commandName)) {
-                    message.channel.send(message.author + " That is not a valid command");
-                    return [2 /*return*/];
-                }
-                _a = commands.get(commandName), description = _a.description, syntax = _a.syntax;
-                meetingEmbed = new RichEmbed().setColor('#1C8CFF');
-                embedDescription = "**description**: " + description + "\n**syntax**: " + commandName + "(" + syntax + ")";
-                meetingEmbed.setTitle(commandName).setDescription(embedDescription);
-                message.channel.send(meetingEmbed);
-                return [2 /*return*/];
-            });
-        });
-    }
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
 };
+exports.__esModule = true;
+var promisify = require('util').promisify;
+var fs = __importStar(require("fs"));
+function userIsAdmin(message) {
+    return __awaiter(this, void 0, void 0, function () {
+        var isOwner, readFile, obj, adminObj, _a, roles, users, role, user;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    isOwner = message.channel.type === 'dm' || message.author.id === message.ownerID;
+                    if (isOwner)
+                        return [2 /*return*/, true];
+                    readFile = promisify(fs.readFile);
+                    return [4 /*yield*/, readFile('./admins.json')];
+                case 1:
+                    obj = _b.sent();
+                    adminObj = JSON.parse(obj);
+                    _a = adminObj[message.guild.id].members, roles = _a.roles, users = _a.users;
+                    for (role in roles) {
+                        if (message.member.roles.has(role))
+                            return [2 /*return*/, true];
+                    }
+                    for (user in users) {
+                        if (message.author.id === user)
+                            return [2 /*return*/, true];
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function isAdminCommand(command, serverID) {
+    return __awaiter(this, void 0, void 0, function () {
+        var readFile, obj, adminObj;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    readFile = promisify(fs.readFile);
+                    return [4 /*yield*/, readFile('./admins.json')];
+                case 1:
+                    obj = _a.sent();
+                    adminObj = JSON.parse(obj);
+                    if (!adminObj[serverID])
+                        return [2 /*return*/, command.includes('ADMIN')];
+                    return [2 /*return*/, !!adminObj[serverID] && !!adminObj[serverID].commands[command]];
+            }
+        });
+    });
+}

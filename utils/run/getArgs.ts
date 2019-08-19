@@ -1,4 +1,4 @@
-import { Type, Param } from './typeDefinitions'
+import { Type, Arg } from './typeDefinitions'
 
 function getTypeOfValue(value: string): Type {
   const isFunction: boolean = value.split(' ')[0].includes('(') && value.slice(-1) === ')';
@@ -10,15 +10,15 @@ function getTypeOfValue(value: string): Type {
   return Type.String;
 }
 
-function getParam(value: string): Param {
+function getArg(value: string): Arg {
   return { 
     type: getTypeOfValue(value), 
     value: value.replace(/^"|^'|'$|"$/g, ''),
   }
 }
 
-function getParams(paramStr: string): Param[] {
-  const types: Param[] = [];
+function getArgs(paramStr: string): Arg[] {
+  const args: Arg[] = [];
 
   let startStr: number = 0;
   let	parentheses: number = 0;
@@ -36,7 +36,7 @@ function getParams(paramStr: string): Param[] {
         ? paramStr.slice(startStr, index)
         : paramStr.slice(startStr);
       
-      types.push(getParam(value.trim()));
+      args.push(getArg(value.trim()));
       startStr = index + 1;
       continue;
     } else if (index === paramStr.length - 1) {
@@ -48,7 +48,7 @@ function getParams(paramStr: string): Param[] {
     if (char === '"' || char === "'") quotes++;
   }
 
-  return types;
+  return args;
 }
 
-export default getParams;
+export default getArgs;

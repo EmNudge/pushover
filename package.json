@@ -4,13 +4,15 @@
   "description": "bot for kaff software",
   "main": "index.js",
   "dependencies": {
-    "discord.js": "^11.4.2",
-    "firebase": "^5.8.2",
+    "discord.js": "^11.5.1",
+    "firebase": "^6.4.0",
+    "grpc": "^1.22.2",
     "node-cron": "^2.0.3"
   },
   "devDependencies": {
     "@types/chai": "^4.2.0",
     "@types/mocha": "^5.2.7",
+    "@types/node": "^12.7.2",
     "chai": "^4.2.0",
     "mocha": "^6.2.0",
     "nyc": "^14.1.1",
