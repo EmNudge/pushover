@@ -62,7 +62,6 @@ exports["default"] = {
                             for (_a = __values(args.slice(1)), _b = _a.next(); !_b.done; _b = _a.next()) {
                                 reactionArg = _b.value;
                                 emoji = reactionArg.split(' ')[0];
-                                console.log(reactionArg);
                                 if (emoji.includes(':')) {
                                     snowflake = emoji.split(':')[2].slice(0, -1);
                                     emoji = message.guild.emojis.get(snowflake);
@@ -77,7 +76,6 @@ exports["default"] = {
                             }
                             finally { if (e_2) throw e_2.error; }
                         }
-                        console.log(reactions);
                         return [4 /*yield*/, message.channel.send(title + "\n\n" + args.slice(1).join('\n'))];
                     case 1:
                         botMessage = _e.sent();

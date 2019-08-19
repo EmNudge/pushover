@@ -19,7 +19,6 @@ function getCommands(): Collection<string, Command> {
             if (fileName.endsWith('.js')) {
                 const command: Command = getCommand('../../commands/' + folderName + fileName);
                 const commandName: string = folderName.split('/').join('.') + command.name;
-                console.log(command)
                 commands.set(commandName, command);
                 continue;
             }
@@ -33,8 +32,6 @@ function getCommands(): Collection<string, Command> {
     }
 
     addCommands(readdirSync('./commands/'));
-
-    // console.log(commands)
 
     return commands;
 }

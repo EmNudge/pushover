@@ -1,18 +1,18 @@
-import { RichEmbed } from 'discord.js';
+import { RichEmbed, Message, Client, TextChannel, DMChannel } from 'discord.js';
 
 export default {
 	name: 'quote',
 	description: 'quotes a specific user based on a link ID',
 	syntax: 'messageLink',
-	async execute(message, args, client) {
+	async execute(message: Message, args: string[], client: Client) {
 		const quoteEmbed = new RichEmbed().setColor('#1C8CFF');
 		if (!args[0].startsWith('https://discordapp.com/channels/')) {
-			message.channel.send(`${message.author} that command requires a post link as the argument. You can copy post links by turning on developer mode and clicking \`Copy Link\` in the 3 dot menu on any post.`)
+			message.reply('that command requires a post link as the argument. You can copy post links by turning on developer mode and clicking `Copy Link` in the 3 dot menu on any post.')
 			return;
 		}
 		const [serverID, channelID, postID] = args[0].split('/').slice(4);
 
-		const quotedChannel = client.channels.get(channelID);
+		const quotedChannel: TextChannel | DMChannel = client.channels.get(channelID) as TextChannel;
 		const quotedServer = client.guilds.get(serverID);
 
 		const quotedPost = await quotedChannel.fetchMessage(postID);
@@ -23,7 +23,11 @@ export default {
 
 		quoteEmbed.setAuthor(quotedPost.author.tag, quotedPost.author.displayAvatarURL);
 		quoteEmbed.setDescription(quotedPost.content);
-		quoteEmbed.addField('Quote Location', `Server: **${quotedServer.name}**  \nChannel: **#${quotedChannel.name}**`)
+
+		let channelText = ''
+		if (!('name' in quotedChannel)) channelText = ` \nChannel: **#${(quotedChannel as TextChannel).name}**`
+
+		quoteEmbed.addField('Quote Location', `Server: **${quotedServer.name}**` + channelText)
 
 		//add createdAt and EditedAt to footer
 		let createdMessage = 'created at ' + quotedPost.createdAt;

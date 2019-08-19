@@ -34,9 +34,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 exports.__esModule = true;
-var getCommands = require('../usefulFunctions.js').getCommands;
-var RichEmbed = require('discord.js').RichEmbed;
+var getCommands_1 = __importDefault(require("../utils/getCommands"));
+var discord_js_1 = require("discord.js");
 exports["default"] = {
     name: 'help',
     description: 'returns the descriptor for a command',
@@ -45,14 +48,14 @@ exports["default"] = {
         return __awaiter(this, void 0, void 0, function () {
             var commands, commandName, _a, description, syntax, meetingEmbed, embedDescription;
             return __generator(this, function (_b) {
-                commands = getCommands();
+                commands = getCommands_1["default"]();
                 commandName = args[0].includes('(') ? args[0].substring(0, args[0].indexOf('(')) : args[0];
                 if (!commands.has(commandName)) {
                     message.channel.send(message.author + " That is not a valid command");
                     return [2 /*return*/];
                 }
                 _a = commands.get(commandName), description = _a.description, syntax = _a.syntax;
-                meetingEmbed = new RichEmbed().setColor('#1C8CFF');
+                meetingEmbed = new discord_js_1.RichEmbed().setColor('#1C8CFF');
                 embedDescription = "**description**: " + description + "\n**syntax**: " + commandName + "(" + syntax + ")";
                 meetingEmbed.setTitle(commandName).setDescription(embedDescription);
                 message.channel.send(meetingEmbed);

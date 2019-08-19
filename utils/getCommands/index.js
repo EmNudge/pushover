@@ -32,7 +32,6 @@ function getCommands() {
                 if (fileName.endsWith('.js')) {
                     var command = getCommand('../../commands/' + folderName + fileName);
                     var commandName = folderName.split('/').join('.') + command.name;
-                    console.log(command);
                     commands.set(commandName, command);
                     continue;
                 }
@@ -49,7 +48,6 @@ function getCommands() {
         }
     }
     addCommands(fs_1.readdirSync('./commands/'));
-    // console.log(commands)
     return commands;
 }
 exports["default"] = getCommands;

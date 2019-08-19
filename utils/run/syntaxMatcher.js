@@ -48,6 +48,9 @@ function argMatchesType(param, arg) {
 /** checks received parameters against function's syntax string */
 function argsMatchSyntax(args, syntax) {
     var e_1, _a;
+    // return early if no syntax needed and provided
+    if (!args.length && !syntax.length)
+        return true;
     if (!argsInRange(syntax, args.length))
         return false;
     try {

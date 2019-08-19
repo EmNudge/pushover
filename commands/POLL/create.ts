@@ -10,15 +10,13 @@ export default {
 
         for (const reactionArg of args.slice(1)) {
             let emoji: Emoji | string = reactionArg.split(' ')[0];
-            console.log(reactionArg)
+
             if (emoji.includes(':')) {
                 const snowflake = emoji.split(':')[2].slice(0, -1);
                 emoji = message.guild.emojis.get(snowflake);
             }
             reactions.push(emoji);
         }
-
-        console.log(reactions)
 
         const botMessage: Message = (await message.channel.send(`${title}\n\n${args.slice(1).join('\n')}`) as Message);
         for (const reaction of reactions) {

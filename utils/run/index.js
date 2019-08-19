@@ -40,7 +40,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var getArgs_1 = __importDefault(require("./getArgs"));
 var syntaxMatcher_1 = __importDefault(require("./syntaxMatcher"));
-var adminRestrictor_1 = __importDefault(require("./adminRestrictor"));
 function runCommand(message, client, commands) {
     return __awaiter(this, void 0, void 0, function () {
         var funcName, args, syntax;
@@ -53,10 +52,6 @@ function runCommand(message, client, commands) {
             if (!commands.has(funcName))
                 return [2 /*return*/];
             args = getArgs_1["default"](message.content.slice(message.content.indexOf('(') + 1, -1));
-            if (adminRestrictor_1["default"](funcName, message)) {
-                message.channel.send(message.author + ' Unfortunately that command is admin restricted and you are not listed as an admin');
-                return [2 /*return*/];
-            }
             syntax = commands.get(funcName).syntax;
             if (!syntaxMatcher_1["default"](args, syntax)) {
                 message.reply("Invalid syntax. Please use `" + funcName + "(" + syntax + ")`");

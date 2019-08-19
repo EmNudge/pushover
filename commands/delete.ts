@@ -1,11 +1,12 @@
 import runCommand from '../utils/run'
 import getCommands from '../utils/getCommands'
+import { Message, Client } from 'discord.js'
 
 export default {
 	name: 'delete',
 	description: 'runs a command and deletes the user message once the command is complete',
 	syntax: 'command(params)',
-	async execute(message, args, client) {
+	async execute(message: Message, args: string[], client: Client) {
 		//delete the command. The entire point of this function
 		if (message.deletable) {
 			message.delete();

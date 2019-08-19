@@ -58,13 +58,13 @@ exports["default"] = {
     syntax: 'messageLink',
     execute: function (message, args, client) {
         return __awaiter(this, void 0, void 0, function () {
-            var quoteEmbed, _a, serverID, channelID, postID, quotedChannel, quotedServer, quotedPost, createdMessage;
+            var quoteEmbed, _a, serverID, channelID, postID, quotedChannel, quotedServer, quotedPost, channelText, createdMessage;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         quoteEmbed = new discord_js_1.RichEmbed().setColor('#1C8CFF');
                         if (!args[0].startsWith('https://discordapp.com/channels/')) {
-                            message.channel.send(message.author + " that command requires a post link as the argument. You can copy post links by turning on developer mode and clicking `Copy Link` in the 3 dot menu on any post.");
+                            message.reply('that command requires a post link as the argument. You can copy post links by turning on developer mode and clicking `Copy Link` in the 3 dot menu on any post.');
                             return [2 /*return*/];
                         }
                         _a = __read(args[0].split('/').slice(4), 3), serverID = _a[0], channelID = _a[1], postID = _a[2];
@@ -79,7 +79,10 @@ exports["default"] = {
                         }
                         quoteEmbed.setAuthor(quotedPost.author.tag, quotedPost.author.displayAvatarURL);
                         quoteEmbed.setDescription(quotedPost.content);
-                        quoteEmbed.addField('Quote Location', "Server: **" + quotedServer.name + "**  \nChannel: **#" + quotedChannel.name + "**");
+                        channelText = '';
+                        if (!('name' in quotedChannel))
+                            channelText = " \nChannel: **#" + quotedChannel.name + "**";
+                        quoteEmbed.addField('Quote Location', "Server: **" + quotedServer.name + "**" + channelText);
                         createdMessage = 'created at ' + quotedPost.createdAt;
                         if (quotedPost.editedAt)
                             createdMessage += ' and edited at ' + quotedPost.editedAt;

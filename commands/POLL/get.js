@@ -50,23 +50,100 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
+var __values = (this && this.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
 exports.__esModule = true;
 var discord_js_1 = require("discord.js");
-var getMax = require('../../usefulFunctions.js').getMax;
+function getHighestReactions(reactions) {
+    var highestVal = Math.max.apply(Math, __spread(reactions.map(function (obj) { return obj.count; })));
+    return reactions.filter(function (obj) { return obj.count === highestVal; });
+}
+function getResults(reactions) {
+    return __awaiter(this, void 0, void 0, function () {
+        var pollResults, totalReactionCount, _a, _b, reaction;
+        var e_1, _c;
+        return __generator(this, function (_d) {
+            pollResults = [];
+            totalReactionCount = 0;
+            try {
+                for (_a = __values(reactions.array()), _b = _a.next(); !_b.done; _b = _a.next()) {
+                    reaction = _b.value;
+                    pollResults.push(reaction.count + " of " + reaction.emoji);
+                    totalReactionCount += reaction.count;
+                }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (_b && !_b.done && (_c = _a["return"])) _c.call(_a);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
+            return [2 /*return*/, {
+                    pollResults: pollResults.join('\n'),
+                    totalReactionCount: totalReactionCount
+                }];
+        });
+    });
+}
 exports["default"] = {
     name: 'get',
     description: 'retrieves poll data from any user',
     syntax: 'postID',
     execute: function (message, args, client) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, serverID, channelID, postID, quotedChannel, pollResultsEmbed;
-            return __generator(this, function (_b) {
-                _a = __read(args[0].split('/').slice(4), 3), serverID = _a[0], channelID = _a[1], postID = _a[2];
-                quotedChannel = client.channels.get(channelID);
-                pollResultsEmbed = new discord_js_1.RichEmbed().setColor('#1C8CFF');
-                console.log(quotedChannel);
-                console.log(channelID, postID);
-                return [2 /*return*/];
+            var _a, serverID, channelID, postID, quotedChannel, pollResultsEmbed, quotedPost, _b, pollResults, totalReactionCount, descText, winners, _c, _d, reaction, percentage;
+            var e_2, _e;
+            return __generator(this, function (_f) {
+                switch (_f.label) {
+                    case 0:
+                        _a = __read(args[0].split('/').slice(4), 3), serverID = _a[0], channelID = _a[1], postID = _a[2];
+                        quotedChannel = client.channels.get(channelID);
+                        if (!(quotedChannel instanceof discord_js_1.TextChannel)) {
+                            message.reply('The poll needs to be in a discord server.');
+                            return [2 /*return*/];
+                        }
+                        pollResultsEmbed = new discord_js_1.RichEmbed().setColor('#1C8CFF');
+                        return [4 /*yield*/, quotedChannel.fetchMessage(postID)];
+                    case 1:
+                        quotedPost = _f.sent();
+                        return [4 /*yield*/, getResults(quotedPost.reactions)];
+                    case 2:
+                        _b = _f.sent(), pollResults = _b.pollResults, totalReactionCount = _b.totalReactionCount;
+                        descText = [pollResults];
+                        winners = getHighestReactions(quotedPost.reactions);
+                        descText.push('\n' + (winners.size > 1 ? 'Tied:' : 'Winner:'));
+                        try {
+                            for (_c = __values(winners.array()), _d = _c.next(); !_d.done; _d = _c.next()) {
+                                reaction = _d.value;
+                                percentage = Math.round(reaction.count / totalReactionCount * 100);
+                                descText.push(reaction.emoji + " with " + reaction.count + " votes - " + percentage + "% of the total");
+                            }
+                        }
+                        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                        finally {
+                            try {
+                                if (_d && !_d.done && (_e = _c["return"])) _e.call(_c);
+                            }
+                            finally { if (e_2) throw e_2.error; }
+                        }
+                        pollResultsEmbed.setTitle('Poll Results');
+                        pollResultsEmbed.setDescription(descText.join('\n'));
+                        message.channel.send(pollResultsEmbed);
+                        return [2 /*return*/];
+                }
             });
         });
     }

@@ -66,7 +66,7 @@ function userIsAdmin(message) {
                         if (message.author.id === user)
                             return [2 /*return*/, true];
                     }
-                    return [2 /*return*/];
+                    return [2 /*return*/, false];
             }
         });
     });

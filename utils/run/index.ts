@@ -2,7 +2,6 @@ import getParams from './getArgs'
 import argsMatchSyntax from './syntaxMatcher'
 import { Message, Client, Collection } from 'discord.js'
 import { Command } from '../index'
-import adminRestricted from './adminRestrictor'
 
 async function runCommand(message: Message, client: Client, commands: Collection<string, Command>) {
     //if it's not in command syntax, ignore
@@ -15,11 +14,6 @@ async function runCommand(message: Message, client: Client, commands: Collection
 
     //get everything between first '(' and last ')' and pass it to getTypes()
     const args: any = getParams(message.content.slice(message.content.indexOf('(') + 1, -1));
-
-    if (adminRestricted(funcName, message)) {
-        message.channel.send(message.author + ' Unfortunately that command is admin restricted and you are not listed as an admin');
-        return;
-    }
 
     //check if the types from the arguments match the requird syntax
     const { syntax } = commands.get(funcName);

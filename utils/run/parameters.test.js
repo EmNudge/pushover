@@ -44,5 +44,8 @@ describe('checks if parameters match a given syntax', function () {
         chai_1.expect(matchSyntax3).equal(false);
         var matchSyntax4 = syntaxMatcher_1["default"](params, 'num: number, str: string');
         chai_1.expect(matchSyntax4).equal(false);
+        var params2 = getArgs_1["default"]('');
+        var matchSyntax5 = syntaxMatcher_1["default"](params2, '');
+        chai_1.expect(matchSyntax5).equal(true);
     });
 });

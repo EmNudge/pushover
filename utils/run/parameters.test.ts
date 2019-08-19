@@ -41,5 +41,9 @@ describe('checks if parameters match a given syntax', function() {
 
     const matchSyntax4 = argsMatchSyntax(params, 'num: number, str: string');
     expect(matchSyntax4).equal(false);
+
+    const params2 = getParams('');
+    const matchSyntax5 = argsMatchSyntax(params2, '');
+    expect(matchSyntax5).equal(true);
   }); 
 });
