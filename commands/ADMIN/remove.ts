@@ -1,10 +1,11 @@
-const { admins } = require("../../firebaseConfig.js");
+import { admins } from "../../firebaseConfig.js";
+import { Message } from 'discord.js';
 
 module.exports = {
 	name: 'remove',
   description: 'make a user or group no longer admin',
   syntax: '@user @role...',
-	async execute(message, args, client) {
+	async execute(message: Message, args: string[]) {
 		if (!args[0].length || (!message.mentions.users && message.mentions.roles)) {
 			message.channel.send(`${message.author} that command must have the syntax: \n \`ADMIN.remove(\@user \@role \@user...)\``);
 			return;

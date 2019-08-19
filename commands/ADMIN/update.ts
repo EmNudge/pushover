@@ -1,19 +1,20 @@
-const { promisify } = require('util');
-const fs = require('fs');
-const { admins } = require("../../firebaseConfig.js");
+import { promisify } from 'util';
+import { admins } from "../../firebaseConfig.js";
+import { Message } from 'discord.js';
+import fs from 'fs';
 
 module.exports = {
 	name: 'update',
   description: 'update admins.json file',
   syntax: '',
-	async execute(message, args, client) {
+	async execute(message: Message) {
     //this command only updates the admin commands for this server to save on DB calls
     //it is thus not an exact copy from usefulFunctions.js
 
     const readFile = promisify(fs.readFile);
     const writeFile = promisify(fs.writeFile);
     const obj = await readFile('./admins.json');
-    const adminObj = JSON.parse(obj);
+    const adminObj = JSON.parse(String(obj));
     const serverID = message.guild.id;
 
     adminObj[serverID] = { members: { users: {}, roles: {} }, commands: {} };

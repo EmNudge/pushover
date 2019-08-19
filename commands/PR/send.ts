@@ -1,5 +1,5 @@
-const { progressReports } = require('../../firebaseConfig.js');
-const { isNumber } = require('../../usefulFunctions.js');
+import { progressReports } from '../../firebaseConfig.js';
+import { isNumber } from '../../usefulFunctions.js';
 
 module.exports = {
 	name: 'send',

@@ -1,11 +1,12 @@
-const { progressReports } = require('../../firebaseConfig.js');
-const { capitalizeFirstLetter, onlyOne, isNumber } = require('../../usefulFunctions.js');
+import { Message } from 'discord.js'
+import { progressReports } from '../../firebaseConfig.js';
+import { capitalizeFirstLetter, onlyOne, isNumber } from '../../usefulFunctions.js';
 
 module.exports = {
 	name: 'changeDay',
 	description: 'change day set for progress reports',
-	async execute(message, args, client) {
-    let guildID, dayOfWeek;
+	async execute(message: Message, args: string[]) {
+    let guildID: string, dayOfWeek: string;
     if (message.guild) {
       guildID = message.guild.id;
       dayOfWeek = args[0];

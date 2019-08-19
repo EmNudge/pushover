@@ -1,11 +1,12 @@
-const { admins } = require("../../firebaseConfig.js");
-const { getCommands } = require('../../usefulFunctions.js');
+import { admins } from "../../firebaseConfig.js";
+import { Message } from 'discord.js';
+import getCommands from '../../utils/getCommands';
 
 module.exports = {
 	name: 'set',
   description: 'set admin restriction on a command',
   syntax: 'command',
-	async execute(message, args, client) {
+	async execute(message: Message, args: string[]) {
     const commands = getCommands();
     const commandName = args[0].includes('(') ? args[0].substring(0, args[0].indexOf('(')) : args[0];
     

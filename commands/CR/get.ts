@@ -1,10 +1,11 @@
-const { customReponses } = require('../../firebaseConfig.js');
+import { customReponses } from '../../firebaseConfig.js';
+import { Message } from 'discord.js';
 
 module.exports = {
 	name: 'get',
   description: 'retrieve a custom response',
   syntax: 'responseName',
-	async execute(message, args, client) {
+	async execute(message: Message, args: string[]) {
     const dbResponses = await customReponses.doc(message.guild.id).get();
     const responses = dbResponses.data().responses;
     if (!responses.some(response => response.trigger == args[0])) {

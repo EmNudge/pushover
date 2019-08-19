@@ -1,11 +1,11 @@
-const { customReponses } = require('../../firebaseConfig.js');
-const { RichEmbed } = require('discord.js');
+import { customReponses } from '../../firebaseConfig.js';
+import { Message, RichEmbed } from 'discord.js';
 
 module.exports = {
 	name: 'show',
   description: 'retrieve all responses',
   syntax: '',
-	async execute(message, args, client) {
+	async execute(message: Message) {
     const responsesEmbed = new RichEmbed().setColor('#1C8CFF').setTitle('Custom Responses');
     const dbResponses = await customReponses.doc(message.guild.id).get();
 

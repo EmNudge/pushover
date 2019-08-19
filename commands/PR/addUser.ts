@@ -1,10 +1,11 @@
-const { progressReports } = require("../../firebaseConfig.js");
+import { progressReports } from "../../firebaseConfig.js";
+import { Message, Client } from 'discord.js';
 
 module.exports = {
 	name: 'addUser',
   description: 'add use to progress reports',
   syntax: '@user @user ...[, @role @role ...]',
-	async execute(message, args, client) {
+	async execute(message: Message, args: string[], client: Client) {
     //if no first argument or no user mentions and no IDs, return
 		if (!args[0].length || (!message.mentions.users && !/^\d+$/.args[0].split(' ')[0])) {
 			message.channel.send(`${message.author} that command must have the syntax: \n \`PR.addUser(\@user \@user ...[, \@role \@role ...])\` or \`PR.addUser(userID userID ...[, roleID roleID ...])\``);

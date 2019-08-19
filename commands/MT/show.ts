@@ -1,11 +1,11 @@
-const { meetingTopics } = require("../../firebaseConfig.js");
-const { RichEmbed } = require('discord.js');
+import { meetingTopics } from "../../firebaseConfig.js";
+import { RichEmbed, Message, Client, TextChannel } from 'discord.js';
 
 module.exports = {
 	name: 'show',
 	description: 'adds a topic to the topic channel and database',
 	syntax: '',
-	async execute(message, args, client) {
+	async execute(message: Message, args: string[], client: Client) {
 		const topicDocExists = await meetingTopics.doc(message.guild.id).get();
 		if (!topicDocExists.exists) {
 			message.channel.send(`${message.author} your server doesn't have an initialized meeting topics channel. \n Set one with \`setTopicChannel(#channel-name)\``);
@@ -35,7 +35,7 @@ module.exports = {
 		meetingEmbed.setTimestamp().setFooter('Meeting Topics', 'https://cdn.discordapp.com/icons/414880062228267008/b2a7ba2b1d69300e7aeb7829843e1d3e.webp')
 		
 		const settings = await meetingTopics.doc(message.guild.id).get();
-		const channel = await client.channels.get(settings.data().channel);
+		const channel: TextChannel = (await client.channels.get(settings.data().channel) as TextChannel);
 
 		//check if old message exists and hasn't been deleted. If so, delete it.
 		if (settings.data().message) {
@@ -48,7 +48,7 @@ module.exports = {
 		}
 
 		//send the embed and commit its ID to the database. If it doesn't exist, create it. If it does, update it.
-		const sentEmbed = await channel.send(meetingEmbed);
+		const sentEmbed: Message = (await channel.send(meetingEmbed) as Message);
 		meetingTopics.doc(message.guild.id).set({ message: sentEmbed.id }, { merge: true });
 
 		if (!!args[0]) {

@@ -1,4 +1,4 @@
-const { meetingTopics } = require("../../firebaseConfig.js");
+import { meetingTopics } from "../../firebaseConfig.js";
 
 module.exports = {
 	name: 'add',

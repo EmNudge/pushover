@@ -1,5 +1,5 @@
 const cron = require("node-cron");
-const { progressReports } = require("./firebaseConfig.js");
+import { progressReports } from "./firebaseConfig.js";
 
 function reminder(client) {
     //called so that it will be run on startup

@@ -1,10 +1,11 @@
-const { admins } = require("../../firebaseConfig.js");
+import { admins } from "../../firebaseConfig.js";
+import { Message } from 'discord.js';
 
 module.exports = {
 	name: 'init',
   description: 'initialize admin DB',
   syntax: '[name]',
-	async execute(message, args, client) {
+	async execute(message: Message, args: string[]) {
     const name = args[0].length ? args[0] : message.guild.name;
     await admins.doc(message.guild.id).set({ name });
 

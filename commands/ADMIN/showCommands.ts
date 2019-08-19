@@ -1,12 +1,12 @@
-const fs = require('fs');
-const { promisify } = require('util');
-const { RichEmbed } = require('discord.js');
+import { Message, RichEmbed } from 'discord.js';
+import fs from 'fs';
+import { promisify } from 'util';
 
 module.exports = {
 	name: 'showCommands',
   description: 'displays all commands restricted to admins',
   syntax: '',
-	async execute(message, args, client) {
+	async execute(message: Message) {
     if (message.channel.type === 'dm') {
       message.channel.send(`That command must be used within a server`);
       return;
@@ -16,7 +16,7 @@ module.exports = {
     
     const readFile = promisify(fs.readFile);
     const adminsJSON = await readFile('./admins.json');
-    const commands = JSON.parse(adminsJSON)[message.guild.id].commands;
+    const commands = JSON.parse(String(adminsJSON))[message.guild.id].commands;
     for (const command in commands) {
       commandsEmbed.addField(command, commands[command].description);
     }

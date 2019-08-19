@@ -1,10 +1,11 @@
-const { customReponses } = require('../../firebaseConfig.js');
+import { customReponses } from '../../firebaseConfig.js';
+import { Message } from 'discord.js';
 
 module.exports = {
 	name: 'set',
   description: 'create a custom response',
   syntax: 'responseName, custom response message',
-	async execute(message, args, client) {
+	async execute(message: Message, args: string[]) {
     const userResponse = args.slice(1).join(', ');
     if (!userResponse.length) {
       message.channel.send(`${message.author} The response cannot be empty. \`CR.delete()\` can be used to remove triggers`);

@@ -1,13 +1,12 @@
-const { admins } = require("../../firebaseConfig.js");
-const fs = require('fs');
-const { promisify } = require('util');
-const { RichEmbed } = require('discord.js');
+import { Message, RichEmbed } from 'discord.js';
+import fs from 'fs';
+import { promisify } from 'util';
 
 module.exports = {
 	name: 'showMembers',
   description: 'displays all admins',
   syntax: '',
-	async execute(message, args, client) {
+	async execute(message: Message) {
     if (message.channel.type === 'dm') {
       message.channel.send(`That command must be used within a server`);
       return;
@@ -17,7 +16,7 @@ module.exports = {
 
     const readFile = promisify(fs.readFile);
     const adminsJSON = await readFile('./admins.json');
-    const { users, roles } = JSON.parse(adminsJSON)[message.guild.id].members;
+    const { users, roles } = JSON.parse(String(adminsJSON))[message.guild.id].members;
 
     if (Object.values(users).length) {
       commandsEmbed.addField('Users', Object.values(users).map(user => `* ${user}\n`).join(''));

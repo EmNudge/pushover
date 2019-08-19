@@ -1,6 +1,6 @@
-const { promisify } = require('util');
-const fs = require('fs');
-const { admins } = require('./firebaseConfig.js');
+import { promisify } from 'util';
+import fs from 'fs';
+import { admins } from './firebaseConfig.js';
 
 //returns true if only one entry in the array fulfils the function.
 //returns false if all are false or more than one are true
@@ -22,7 +22,7 @@ async function setAdminFile() {
     const readFile = promisify(fs.readFile);
     const writeFile = promisify(fs.writeFile);
     const obj = await readFile('./admins.json');
-    const adminObj = JSON.parse(obj);
+    const adminObj = JSON.parse(String(obj));
 
     const servers = await admins.get();
     for (const server of servers.docs) {
@@ -56,7 +56,7 @@ function getMax(arrOfObjs, property) {
     return arrOfObjs.filter(obj => obj[property] === highestVal);
 }
 
-module.exports = {
+export {
     capitalizeFirstLetter,
     onlyOne,
     isNumber,
