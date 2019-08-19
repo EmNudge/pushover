@@ -1,4 +1,4 @@
-import getCommands from '../utils/getCommands'
+import getCommands from '../utils/getCommands';
 import { RichEmbed, Message } from 'discord.js';
 
 export default {
@@ -10,7 +10,7 @@ export default {
 		const commandName = args[0].includes('(') ? args[0].substring(0, args[0].indexOf('(')) : args[0];
 
 		if (!commands.has(commandName)) {
-			message.channel.send(`${message.author} That is not a valid command`);
+			message.reply(`that is not a valid command`);
 			return;
 		}
 

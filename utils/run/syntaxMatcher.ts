@@ -26,6 +26,7 @@ function argMatchesType(param: string, arg: Arg): boolean {
 function argsMatchSyntax(args: Arg[], syntax: string): boolean {
   // return early if no syntax needed and provided
   if (!args.length && !syntax.length) return true;
+  if (args.length && !syntax.length) return false;
 
   if (!argsInRange(syntax, args.length)) return false;
 

@@ -51,7 +51,7 @@ exports["default"] = {
                 commands = getCommands_1["default"]();
                 commandName = args[0].includes('(') ? args[0].substring(0, args[0].indexOf('(')) : args[0];
                 if (!commands.has(commandName)) {
-                    message.channel.send(message.author + " That is not a valid command");
+                    message.reply("that is not a valid command");
                     return [2 /*return*/];
                 }
                 _a = commands.get(commandName), description = _a.description, syntax = _a.syntax;

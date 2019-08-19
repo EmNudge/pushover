@@ -2,6 +2,7 @@ import { Collection } from 'discord.js';
 import { readdirSync } from 'fs';
 import { Command } from '../index'
 
+/** return the same object whether using export default or module.exports */
 function getCommand(path): Command {
     const command = require(path);
     if (command.__esModule) return command.default
