@@ -4,6 +4,7 @@
         "downlevelIteration": true,
         "resolveJsonModule": true,
         "esModuleInterop": true,
-        "strict": false
+        "strict": false,
+        "baseUrl": "."
     }
 }

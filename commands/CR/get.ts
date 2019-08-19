@@ -1,4 +1,4 @@
-import { customReponses } from '../../firebaseConfig.js';
+import { customReponses } from 'firebaseConfig';
 import { Message } from 'discord.js';
 
 module.exports = {

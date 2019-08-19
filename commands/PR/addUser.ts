@@ -1,4 +1,4 @@
-import { progressReports } from "../../firebaseConfig.js";
+import { progressReports } from 'firebaseConfig';
 import { Message, Client } from 'discord.js';
 
 module.exports = {

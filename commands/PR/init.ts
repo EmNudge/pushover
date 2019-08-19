@@ -1,4 +1,4 @@
-const { progressReports } = require("../../firebaseConfig.js");
+import { progressReports } from 'firebaseConfig';
 
 module.exports = {
 	name: 'init',

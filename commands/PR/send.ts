@@ -1,5 +1,5 @@
-import { progressReports } from '../../firebaseConfig.js';
-import { isNumber } from '../../usefulFunctions.js';
+import { progressReports } from 'firebaseConfig';
+import { isNumber } from 'usefulFunctions';
 
 module.exports = {
 	name: 'send',

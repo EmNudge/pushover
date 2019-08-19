@@ -1,4 +1,4 @@
-import getCommands from '../utils/getCommands';
+import getCommands from 'utils/getCommands';
 import { RichEmbed, Message } from 'discord.js';
 
 export default {

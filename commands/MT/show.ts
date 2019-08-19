@@ -1,4 +1,4 @@
-import { meetingTopics } from "../../firebaseConfig.js";
+import { meetingTopics } from 'firebaseConfig';
 import { RichEmbed, Message, Client, TextChannel } from 'discord.js';
 
 module.exports = {
