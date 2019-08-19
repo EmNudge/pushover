@@ -9,11 +9,17 @@ export interface Arg {
   value: string,
 }
 
-
 export interface Command {
   name: string;
   description: string;
   syntax: string;
   execute: Function;
+  channelType?: ChannelType;
 }
 
+export enum ChannelType {
+  Any,
+  DM,
+  Guild,
+  Group,
+}

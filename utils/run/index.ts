@@ -1,7 +1,9 @@
-import getParams from './getArgs'
+import getArgs from './getArgs'
 import argsMatchSyntax from './syntaxMatcher'
+import isRestrictedChannel from './channelRestrictor'
 import { Message, Client, Collection } from 'discord.js'
-import { Command } from '../index'
+import { Command, Arg } from '../index'
+
 
 async function runCommand(message: Message, client: Client, commands: Collection<string, Command>) {
     //if it's not in command syntax, ignore
@@ -12,13 +14,15 @@ async function runCommand(message: Message, client: Client, commands: Collection
     //if the command name isn't valid, ignore
     if (!commands.has(funcName)) return;
 
-    //get everything between first '(' and last ')' and pass it to getTypes()
-    const args: any = getParams(message.content.slice(message.content.indexOf('(') + 1, -1));
-
-    //check if the types from the arguments match the requird syntax
-    const { syntax } = commands.get(funcName);
+    const argString = message.content.slice(message.content.indexOf('(') + 1, -1);
+    const args: Arg[] = getArgs(argString);
+    const { syntax, channelType } = commands.get(funcName);
     if (!argsMatchSyntax(args, syntax)) {
         message.reply(`Invalid syntax. Please use \`${funcName}(${syntax})\``)
+        return;
+    }
+    if (isRestrictedChannel(message.channel, channelType)) {
+        message.reply(`that command must be used in channel type: ${channelType}`);
         return;
     }
     
