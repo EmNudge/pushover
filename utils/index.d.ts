@@ -1,7 +1,10 @@
 export enum Type {
-  String,
-  Function,
-  Number,
+  String = "string",
+  Function = "function",
+  CalledFunction = "calledFunction",
+  Number = "number",
+  ID = "id",
+  Link = "link",
 }
 
 export interface Arg {

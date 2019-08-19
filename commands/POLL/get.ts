@@ -1,5 +1,5 @@
+import { Type } from 'utils/index'
 import { RichEmbed, Message, Client, TextChannel, MessageReaction, Collection } from 'discord.js';
-
 
 function getHighestReactions(reactions: Collection<string, MessageReaction>) {
     const highestVal = Math.max(...reactions.map((obj: MessageReaction) => obj.count));
@@ -22,8 +22,8 @@ async function getResults(reactions: Collection<string, MessageReaction>) {
 
 export default {
     name: 'get',
-    description: 'retrieves poll data from any user',
-    syntax: 'postID',
+    description: 'retrieves poll data from any post',
+    syntax: `postLink: ${Type.Link}`,
     async execute(message: Message, args: string[], client: Client) {
         const [serverID, channelID, postID] = args[0].split('/').slice(4);
 

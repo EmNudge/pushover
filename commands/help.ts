@@ -1,10 +1,11 @@
+import { Type } from 'utils/index'
 import getCommands from 'utils/getCommands';
 import { RichEmbed, Message } from 'discord.js';
 
 export default {
 	name: 'help',
 	description: 'returns the descriptor for a command',
-	syntax: 'commandName',
+	syntax: `commandName: ${Type.Function}`,
 	async execute(message: Message, args: string[]) {
 		const commands = getCommands();
 		const commandName = args[0].includes('(') ? args[0].substring(0, args[0].indexOf('(')) : args[0];

@@ -1,10 +1,12 @@
+import { Message } from 'discord.js'
+import { Type } from 'utils/index'
 import { progressReports } from 'firebaseConfig';
 
 module.exports = {
 	name: 'init',
 	description: 'sets up DB for Progress Reports',
-	syntax: '[server name]',
-	async execute(message, args, client) {
+	syntax: `[server name]: ${Type.String}`,
+	async execute(message: Message, args: string[]) {
 		const { name, id } = message.guild;
 		const nameToSet = args[0].length ? args.join(' ') : name;
 

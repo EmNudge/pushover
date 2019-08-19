@@ -1,11 +1,13 @@
+import { Message } from 'discord.js'
+import { Type } from 'utils/index'
 import { progressReports } from 'firebaseConfig';
 import { isNumber } from 'usefulFunctions';
 
 module.exports = {
 	name: 'send',
   description: 'send a progress reports',
-  syntax: 'serverID[, message/number]',
-	async execute(message, args, client) {
+  syntax: `serverID: ${Type.String} [, message/number]`,
+	async execute(message: Message, args: string[]) {
     const currentDate = Date().split(' ').slice(1, 4).join(' ');
     const msgLimit = 10; //how many messages up can the user ask the bot to go
     let report = '';
@@ -34,11 +36,10 @@ module.exports = {
       report = messageArray.join('');
     } else if (args.length == 1) {
       //if only serverID is present
-      let messages = await message.channel.fetchMessages({ limit: msgLimit });
-      messages = Array.from(messages.values());
+      const messages = await message.channel.fetchMessages({ limit: msgLimit });
       
       const messageArray = [];
-      for (const [index, m] of messages.entries()) {
+      for (const [index, m] of Array.from(messages.values()).entries()) {
         if (!index) continue; //ignore first index since that's the same message
         if (m.author.id !== message.author.id) break;
         messageArray.push(m.content + '\n');

@@ -1,9 +1,10 @@
+import { Type } from 'utils/index'
 import { Message, Emoji } from 'discord.js'
 
 export default {
 	name: 'create',
 	description: 'creates a poll',
-	syntax: 'poll title, [emoji] = [poll choice], [emoji] = [poll choice], ...',
+	syntax: `poll title: ${Type.String}, [emoji] = [poll choice], [emoji] = [poll choice], ...`,
 	async execute(message: Message, args: string[]) {
         const title = args[0];
         const reactions: any[] = [];
