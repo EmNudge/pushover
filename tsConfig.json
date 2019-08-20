@@ -5,6 +5,7 @@
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "strict": false,
-        "baseUrl": "."
+        "baseUrl": ".",
+        "module": "CommonJS"
     }
 }

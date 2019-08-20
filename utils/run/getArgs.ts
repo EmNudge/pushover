@@ -1,4 +1,4 @@
-import { Type, Arg } from './typeDefinitions'
+import { Type, Arg } from '../index'
 
 function getTypeOfValue(value: string): Type {
   const isFunction: boolean = value.split(' ')[0].includes('(') && value.slice(-1) === ')';

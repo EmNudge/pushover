@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Type } from './typeDefinitions'
+import { Type } from 'utils/index'
 import argsMatchSyntax, { argsInRange } from './syntaxMatcher'
 import getParams from './getArgs'
 

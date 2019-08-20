@@ -13,10 +13,7 @@ function capitalizeFirstLetter(word) {
     return word.substring(0, 1).toUpperCase() + word.slice(1);
 }
 
-//checks if the string is a number and contains no string values
-function isNumber(string) {
-    return /^\d+$/.test(string);
-}
+const isNumber = (str: string) => Number.isFinite(Number(str)) && str.length;
 
 async function setAdminFile() {
     const readFile = promisify(fs.readFile);

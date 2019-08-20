@@ -1,4 +1,4 @@
-import { Type, Arg } from './typeDefinitions'
+import { Type, Arg } from '../index'
 
 /** checks if parameter length is within the allowed range */
 function argsInRange(syntax: string, length: number): boolean {
@@ -17,9 +17,8 @@ function argMatchesType(param: string, arg: Arg): boolean {
   if (!param.includes(':')) return true;
 
   const type = param.split(':')[1].trim();
-  const typeName = type[0].toUpperCase() + type.slice(1).toLowerCase();
 
-  return Type[typeName] === arg.type;
+  return type === arg.type;
 }
 
 /** checks received parameters against function's syntax string */

@@ -6,11 +6,6 @@ module.exports = {
   description: 'add use to progress reports',
   syntax: '@user @user ...[, @role @role ...]',
 	async execute(message: Message, args: string[], client: Client) {
-    //if no first argument or no user mentions and no IDs, return
-		if (!args[0].length || (!message.mentions.users && !/^\d+$/.args[0].split(' ')[0])) {
-			message.channel.send(`${message.author} that command must have the syntax: \n \`PR.addUser(\@user \@user ...[, \@role \@role ...])\` or \`PR.addUser(userID userID ...[, roleID roleID ...])\``);
-			return;
-    }
     const serverDoc = await progressReports.doc(message.guild.id).get();
     if (!serverDoc.exists) {
       message.channel.send(`${message.author} you must first use \`PR.init([server name])\``)
