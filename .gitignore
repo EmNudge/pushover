@@ -1,3 +1,5 @@
 node_modules/
 config.json
 *.js
+coverage/
+.nyc_output/
