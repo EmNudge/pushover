@@ -5,7 +5,13 @@
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "strict": false,
+        "module": "CommonJS",
+        "moduleResolution": "node",
         "baseUrl": ".",
-        "module": "CommonJS"
+        "paths": {
+            "types": ["src/types/index"],
+            "firebaseConfig": ["src/firebaseConfig"]
+        },
+        "outDir": "build"
     }
 }

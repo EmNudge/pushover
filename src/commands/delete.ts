@@ -1,6 +1,6 @@
-import { Type } from 'utils/index'
-import runCommand from 'utils/run'
-import getCommands from 'utils/getCommands'
+import { Type } from 'src/types'
+import runCommand from 'src/utils/run'
+import getCommands from 'src/utils/getCommands'
 import { Message, Client } from 'discord.js'
 
 export default {

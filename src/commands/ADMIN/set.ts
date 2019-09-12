@@ -1,6 +1,6 @@
-import { admins } from "../../firebaseConfig.js";
+import { admins } from "firebaseConfig.js";
 import { Message } from 'discord.js';
-import getCommands from 'utils/getCommands';
+import getCommands from 'src/utils/getCommands';
 
 module.exports = {
 	name: 'set',

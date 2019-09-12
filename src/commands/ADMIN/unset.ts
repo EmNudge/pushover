@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
 import { admins } from 'firebaseConfig'
-import getCommands from 'utils/getCommands'
+import getCommands from 'src/utils/getCommands'
 
 module.exports = {
 	name: 'unset',

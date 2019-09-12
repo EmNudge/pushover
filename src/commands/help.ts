@@ -1,5 +1,5 @@
-import { Type } from 'utils/index'
-import getCommands from 'utils/getCommands';
+import { Type } from 'src/types'
+import getCommands from 'src/utils/getCommands';
 import { RichEmbed, Message } from 'discord.js';
 
 export default {

@@ -1,4 +1,4 @@
-import { Type } from 'utils/index'
+import { Type } from 'types'
 import { Message, Emoji } from 'discord.js'
 
 export default {

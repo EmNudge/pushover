@@ -1,6 +1,6 @@
 import { Collection } from 'discord.js';
 import { readdirSync } from 'fs';
-import { Command } from '../index'
+import { Command } from 'src/types'
 
 /** return the same object whether using export default or module.exports */
 function getCommand(path): Command {
