@@ -1,7 +1,7 @@
 import { Message } from 'discord.js'
-import { Type } from 'types'
-import { progressReports } from 'firebaseConfig';
-import { isNumber } from 'usefulFunctions';
+import { Type } from '../../utils/index'
+import { progressReports } from '../../firebaseConfig';
+import { isNumber } from '../../usefulFunctions';
 
 module.exports = {
 	name: 'send',

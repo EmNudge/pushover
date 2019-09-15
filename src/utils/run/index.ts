@@ -2,7 +2,7 @@ import getArgs from './getArgs'
 import argsMatchSyntax from './syntaxMatcher'
 import isRestrictedChannel from './channelRestrictor'
 import { Message, Client, Collection } from 'discord.js'
-import { Command, Arg } from 'src/types'
+import { Command, Arg } from '../index'
 
 
 async function runCommand(message: Message, client: Client, commands: Collection<string, Command>) {

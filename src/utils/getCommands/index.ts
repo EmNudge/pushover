@@ -1,6 +1,7 @@
 import { Collection } from 'discord.js';
 import { readdirSync } from 'fs';
-import { Command } from 'src/types'
+import { Command } from '../index'
+import path from 'path';
 
 /** return the same object whether using export default or module.exports */
 function getCommand(path): Command {
@@ -18,21 +19,24 @@ function getCommands(): Collection<string, Command> {
             if (fileName.includes('.') && !fileName.endsWith('.js')) continue;
 
             if (fileName.endsWith('.js')) {
-                const command: Command = getCommand('../../commands/' + folderName + fileName);
+                const dir = path.join(__dirname, '../../commands/', folderName, fileName);
+                const command: Command = getCommand(dir);
                 const commandName: string = folderName.split('/').join('.') + command.name;
                 commands.set(commandName, command);
                 continue;
             }
 
             //recursively call if it's a folder
+            const dir = path.join(__dirname, '../../commands/', fileName);
             addCommands(
-                readdirSync('./commands/' + fileName),
+                readdirSync(dir),
                 folderName + fileName + '/'
             );
         }
     }
 
-    addCommands(readdirSync('./commands/'));
+    const dir = path.join(__dirname, '../../commands/');
+    addCommands(readdirSync(dir));
 
     return commands;
 }

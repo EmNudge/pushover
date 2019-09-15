@@ -1,4 +1,4 @@
-import { Type, Arg } from 'src/types'
+import { Type, Arg } from '../../types'
 
 /** checks if parameter length is within the allowed range */
 function argsInRange(syntax: string, length: number): boolean {

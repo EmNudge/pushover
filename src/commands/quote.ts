@@ -1,5 +1,5 @@
 import { RichEmbed, Message, Client, TextChannel, DMChannel } from 'discord.js';
-import { Type } from 'src/types'
+import { Type } from '../utils/index'
 
 export default {
 	name: 'quote',

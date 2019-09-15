@@ -1,4 +1,4 @@
-import { admins } from 'firebaseConfig';
+import { admins } from '../../firebaseConfig';
 import { Message } from 'discord.js';
 
 module.exports = {

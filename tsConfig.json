@@ -6,12 +6,6 @@
         "esModuleInterop": true,
         "strict": false,
         "module": "CommonJS",
-        "moduleResolution": "node",
-        "baseUrl": ".",
-        "paths": {
-            "types": ["src/types/index"],
-            "firebaseConfig": ["src/firebaseConfig"]
-        },
-        "outDir": "build"
+        "outDir": "dist"
     }
 }

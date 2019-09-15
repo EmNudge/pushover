@@ -1,4 +1,4 @@
-import { Type } from 'types'
+import { Type } from '../../utils/index'
 import { RichEmbed, Message, Client, TextChannel, MessageReaction, Collection } from 'discord.js';
 
 function getHighestReactions(reactions: Collection<string, MessageReaction>) {

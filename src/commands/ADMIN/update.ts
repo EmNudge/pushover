@@ -1,5 +1,5 @@
 import { promisify } from 'util';
-import { admins } from 'firebaseConfig'
+import { admins } from '../../firebaseConfig'
 import { Message } from 'discord.js';
 import fs from 'fs';
 

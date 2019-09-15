@@ -1,5 +1,5 @@
 import { Channel, TextChannel, DMChannel, GroupDMChannel } from 'discord.js'
-import { ChannelType } from 'src/types'
+import { ChannelType } from '../../types'
 
 function isRestrictedChannel(channel: Channel, channelType: ChannelType = ChannelType.Any) {
   if (channelType === ChannelType.Any) return false;

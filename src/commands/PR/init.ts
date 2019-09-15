@@ -1,6 +1,6 @@
 import { Message } from 'discord.js'
-import { Type } from 'types'
-import { progressReports } from 'firebaseConfig';
+import { Type } from '../../utils/index'
+import { progressReports } from '../../firebaseConfig';
 
 module.exports = {
 	name: 'init',

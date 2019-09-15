@@ -1,4 +1,4 @@
-import { meetingTopics } from 'firebaseConfig';
+import { meetingTopics } from '../../firebaseConfig';
 
 module.exports = {
 	name: 'setChannel',

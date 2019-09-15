@@ -1,6 +1,6 @@
 import { Message } from 'discord.js'
-import { progressReports } from 'firebaseConfig';
-import { capitalizeFirstLetter, onlyOne, isNumber } from 'usefulFunctions';
+import { progressReports } from '../../firebaseConfig';
+import { capitalizeFirstLetter, onlyOne, isNumber } from '../../usefulFunctions';
 
 module.exports = {
 	name: 'changeDay',
