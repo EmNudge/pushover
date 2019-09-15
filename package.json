@@ -1,8 +1,8 @@
 {
-  "name": "kaff-bot",
+  "name": "pushover",
   "version": "1.0.0",
-  "description": "bot for kaff software",
-  "main": "index.js",
+  "description": "bot with unique command syntax",
+  "main": "dist/index.js",
   "dependencies": {
     "discord.js": "^11.5.1",
     "firebase": "^6.4.0",
@@ -20,17 +20,9 @@
     "typescript": "^3.5.3"
   },
   "scripts": {
-    "main": "index.js",
+    "main": "tsc && node dist/index.js",
     "test": "mocha -r ts-node/register **/*.test.ts"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@gitlab.com/kaff-software/kaff-bot.git"
-  },
   "author": "EmNudge",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://gitlab.com/kaff-software/kaff-bot/issues"
-  },
-  "homepage": "https://gitlab.com/kaff-software/kaff-bot#readme"
+  "license": "ISC"
 }
