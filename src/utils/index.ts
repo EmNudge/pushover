@@ -1,10 +1,12 @@
 export enum Type {
   String = "string",
   Function = "function",
-  CalledFunction = "calledFunction",
   Number = "number",
   ID = "id",
   Link = "link",
+  Channel = "channel",
+  Role = "role",
+  User = "user"
 }
 
 export interface Arg {

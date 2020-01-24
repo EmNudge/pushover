@@ -1,21 +1,26 @@
-import getArgs from './getArgs'
 import argsMatchSyntax from './syntaxMatcher'
 import isRestrictedChannel from './channelRestrictor'
 import { Message, Client, Collection } from 'discord.js'
 import { Command, Arg } from '../index'
+import { functionParser } from '../combinators/functions'
 
 
 async function runCommand(message: Message, client: Client, commands: Collection<string, Command>) {
-    //if it's not in command syntax, ignore
-    if (!message.content.split(' ')[0].includes('(') || !message.content.endsWith(')')) return;
+    // first a dirty check to see if it has both parens
+    if (!message.content.includes('(') || !message.content.trim().endsWith(')')) return;
 
-    //get everything before the first '(' and use as the command name
-    const funcName = message.content.slice(0, message.content.indexOf('('));
+    // expensive check to extract all the data using a recursive parser combinator
+    const parserFunc = functionParser.run(message.content)
+
+    if (parserFunc.isError) return;
+
+    // name: string[], args: string[]
+    const { name, args } = parserFunc.result
+    const funcName = name.join('.')
+
     //if the command name isn't valid, ignore
     if (!commands.has(funcName)) return;
 
-    const argString = message.content.slice(message.content.indexOf('(') + 1, -1);
-    const args: Arg[] = getArgs(argString);
     const { syntax, channelType } = commands.get(funcName);
     if (!argsMatchSyntax(args, syntax)) {
         message.reply(`Invalid syntax. Please use \`${funcName}(${syntax})\``)

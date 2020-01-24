@@ -1,5 +1,6 @@
 {
     "files.exclude": {
         "**/*.js": { "when": "$(basename).ts" }
-    }
+    },
+    "eslint.enable": false
 }
