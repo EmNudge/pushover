@@ -64,5 +64,5 @@ const link = sequenceOf([
 ])
 
 
-export { variableName, funcName, string, boolean, number, link };
+export { variableName, funcName, string, boolean, number, link, enclosed };
   

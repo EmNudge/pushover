@@ -5,14 +5,16 @@ import {
 	digits,
 	char,
 	sequenceOf,
-	many,
+	recursiveParser,
 	optionalWhitespace,
 	sepBy,
-	anythingExcept,
+	possibly,
 	str,
 } from "arcsecond";
 
 import { Type } from '../index'
+
+import { enclosed } from './funcTypes'
 
 const typeToEnum = {
 	number: Type.Number,
@@ -24,8 +26,6 @@ const typeToEnum = {
 }
 
 // parse strings like "num: number | string, name: string[, channel: channel | string]"
-// what may be really difficult here is recursive allowing optional params via [[]], but still using it as a separator
-// I stopped writing this since I realized the approach I was taking would let some things go through and/or get blocked.
 
 // take type string and return Enum version
 const type = choice([
@@ -52,31 +52,45 @@ const param = sequenceOf([
 	types
 ]).map(res => ({
 	name: res[0],
-	types: res[4],
-	optional: false,
+	types: res[4]
 }))
 
-// either allow " [ , " or just " , " as a parameter separator
-// in actuality it is malformed if there is a "[," and no ending "]", but it doesn't really matter
-const paramSeparator = sequenceOf([
+
+const commaSeparator = sequenceOf([
 	optionalWhitespace,
-	choice([
-		sequenceOf([
-			char('['),
-			optionalWhitespace,
-			char(','),
-		]),
-		char(','),
-	]),
+	char(","),
+	optionalWhitespace
+]);
+
+// brackets to enclose a new bunch of params
+const openBracket = sequenceOf([
+	optionalWhitespace,
+	char('['),
+	optionalWhitespace,
+])
+const closeBracket = sequenceOf([
+	optionalWhitespace,
+	char(']'),
 	optionalWhitespace,
 ])
 
-const prototypeParser = sequenceOf([
-	sepBy(paramSeparator)(param),
-	many(char(']'))
-]).map(res => {
-	const [params, brackets] = res
-	const startingOptional = params.length - brackets.length
-})
+// allows for optional params. Must use recursiveParser since it's recursive 
+const optionalPrototype = enclosed(
+	openBracket, 
+	recursiveParser(() => prototypeParser), 
+	closeBracket
+)
 
-export { prototypeParser }
+// allows for a leading comma in order to have nested recursive optional params
+// get parsed correctly
+const prototypeParser = sequenceOf([
+	possibly(commaSeparator),
+	sepBy(commaSeparator)(param),
+	possibly(optionalPrototype)
+]).map(res => ({
+	args: res[1],
+	optional: res[2],
+}))
+
+
+export { prototypeParser, param }
