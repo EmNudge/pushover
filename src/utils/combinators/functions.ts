@@ -10,15 +10,6 @@ import {
 import { boolean, string, number, variableName, funcName, link, channel, user, role } from './funcTypes'
 import { Type } from '../index'
 
-export interface FunctionArgument {
-  type: Type;
-  value: String | Boolean | Number | ParsedFunction;
-}
-export interface ParsedFunction {
-  name: string[];
-  args: FunctionArgument[];
-}
-
 const commaSeparator = sequenceOf([
 	optionalWhitespace,
 	char(","),

@@ -16,16 +16,6 @@ import { Type } from '../index'
 
 import { enclosed } from './funcTypes'
 
-export interface PrototypeArgument {
-  name: string;
-  types: Type[];
-}
-
-export interface ParsedPrototype {
-  args: PrototypeArgument[];
-  optional: null | ParsedPrototype;
-}
-
 const typeToEnum = {
 	number: Type.Number,
 	string: Type.String,

@@ -1,9 +1,8 @@
-import { ParsedFunction } from "../combinators/functions";
-import { ParsedPrototype } from "../combinators/prototype";
+import { ParsedFunctionResult, ParsedPrototypeResult } from "../combinators";
 
 function matchesPrototype(
-  parsedFunction: ParsedFunction,
-  parsedPrototype: ParsedPrototype
+  parsedFunction: ParsedFunctionResult,
+  parsedPrototype: ParsedPrototypeResult
 ) {
   // return early if the length already doesn't match
   const pfLen = parsedFunction.args.length;
@@ -19,7 +18,7 @@ function matchesPrototype(
 /// or any of the optional lengths
 function matchesAnyLength(
   parsedFunctionLength: number,
-  parsedPrototype: ParsedPrototype
+  parsedPrototype: ParsedPrototypeResult
 ) {
   let currProto = parsedPrototype;
   let len = 0;
@@ -44,8 +43,8 @@ function matchesAnyLength(
 /// esnures that the allowed types for a prototype match up with the input
 /// this function already assumes the lengths match up
 function matchesType(
-  parsedFunction: ParsedFunction,
-  parsedPrototype: ParsedPrototype
+  parsedFunction: ParsedFunctionResult,
+  parsedPrototype: ParsedPrototypeResult
 ) {
   const protoIter = iterableFromPrototype(parsedPrototype);
 
@@ -59,7 +58,7 @@ function matchesType(
 }
 
 /// returns an iterator by going deep into a prototype.
-function* iterableFromPrototype(parsedPrototype: ParsedPrototype) {
+function* iterableFromPrototype(parsedPrototype: ParsedPrototypeResult) {
   let currProto = parsedPrototype;
 
   while (currProto) {

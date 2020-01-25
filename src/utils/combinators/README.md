@@ -2,6 +2,10 @@
 
 These are parser comnbinators - a paradigm of parsing using the language itself wherein smaller parsers are combined to make larger parsers instead of an external parsing language.
 
+## index.ts
+Imports function.ts and prototype.ts in order to export them with the correct types attached since arcsecond has no TS types and types would need to be written out directly regardless.
+It also exports the types for the `result` of eah parser, allowing for better implied TS types.
+
 ## function.ts
 
 The only useful export here is `functionParser`. When passed a function with the format `FOLDERNAME.func(1234, "param 2")` to its `.run()` method, it will return an object. This object will have the resulting data structure in its `result` property or have an error described in its `error` property.

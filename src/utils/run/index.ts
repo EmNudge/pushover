@@ -1,14 +1,15 @@
 import matchesPrototype from './syntaxMatcher'
 import isRestrictedChannel from './channelRestrictor'
 import { Message, Client, Collection } from 'discord.js'
-import { Command, Arg } from '../index'
-import { functionParser } from '../combinators/functions'
-import { prototypeParser } from '../combinators/prototype'
+import { Command } from '../index'
+import { prototypeParser, functionParser } from '../combinators/'
 
 
 async function runCommand(message: Message, client: Client, commands: Collection<string, Command>) {
-    // first a dirty check to see if it has both parens
-    if (!message.content.includes('(') || !message.content.trim().endsWith(')')) return;
+    // first a dirty check to see if it has a closing paren
+    // can't check opening since parser allows for whitespace which is hard to check for
+    // without a parser. Cheaper to just let the parser handle it from here.
+    if (!message.content.trim().endsWith(')')) return;
 
     // expensive check to extract all the data using a recursive parser combinator
     const parserFunc = functionParser.run(message.content)
@@ -24,9 +25,9 @@ async function runCommand(message: Message, client: Client, commands: Collection
 
     const { syntax, channelType } = commands.get(funcName);
 
-    const parsedPrototype = prototypeParser.run(syntax)
+    const parsedPrototype = prototypeParser.run(syntax).result
     
-    if (!matchesPrototype(args, parsedPrototype)) {
+    if (!matchesPrototype(parserFunc.result, parsedPrototype)) {
         message.reply(`Invalid syntax. Please use \`${funcName}(${syntax})\``)
         return;
     }
