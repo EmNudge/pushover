@@ -1,45 +1,96 @@
-import { Type, Arg } from '../../types'
+import { ParsedFunction } from "../combinators/functions";
+import { ParsedPrototype } from "../combinators/prototype";
 
-/** checks if parameter length is within the allowed range */
-function argsInRange(syntax: string, length: number): boolean {
-  const maxParams = syntax.split(',').length;
+function matchesPrototype(
+  parsedFunction: ParsedFunction,
+  parsedPrototype: ParsedPrototype
+) {
+  // return early if the length already doesn't match
+  const pfLen = parsedFunction.args.length;
+  const matchesLength = matchesAnyLength(pfLen, parsedPrototype);
+  if (!matchesLength) return false;
 
-  const optionalParamNum = syntax.split('[').length - 1;
-  const minParams = maxParams - optionalParamNum;
+  const allTypesMatch = matchesType(parsedFunction, parsedPrototype);
 
-  const paramsInRange = minParams <= length && length <= maxParams;
-  return paramsInRange;
+  return allTypesMatch;
 }
 
-/** checks if an argument conforms to the syntax of the parameter */
-function argMatchesType(param: string, arg: Arg): boolean {
-  // if no type, default to any
-  if (!param.includes(':')) return true;
+/// Loops through the prototype to see if the length matches the normal length
+/// or any of the optional lengths
+function matchesAnyLength(
+  parsedFunctionLength: number,
+  parsedPrototype: ParsedPrototype
+) {
+  let currProto = parsedPrototype;
+  let len = 0;
 
-  const type = param.split(':')[1].trim();
+  while (currProto && parsedFunctionLength > len) {
+    len += currProto.args.length;
 
-  return type === arg.type;
+    // matches this level of arguments
+    if (parsedFunctionLength === len) return true;
+
+    // too few arguments
+    if (parsedFunctionLength < len) return false;
+
+    // going deeper into the optional params
+    currProto = currProto.optional;
+  }
+
+  // more params provided than there are even optional params
+  return false;
 }
 
-/** checks received parameters against function's syntax string */
-function argsMatchSyntax(args: Arg[], syntax: string): boolean {
-  // return early if no syntax needed and provided
-  if (!args.length && !syntax.length) return true;
-  if (args.length && !syntax.length) return false;
+/// esnures that the allowed types for a prototype match up with the input
+/// this function already assumes the lengths match up
+function matchesType(
+  parsedFunction: ParsedFunction,
+  parsedPrototype: ParsedPrototype
+) {
+  const protoIter = iterableFromPrototype(parsedPrototype);
 
-  if (!argsInRange(syntax, args.length)) return false;
-
-  for (const [index, param] of syntax.split(',').entries()) {
-    if (!argMatchesType(param, args[index])) return false;
+  for (const [userArg, protoArg] of combineIter(parsedFunction.args, protoIter)) {
+    // check if any types on the current proto arg match with user's argument
+    const typeMatches = protoArg.types.includes(userArg.type);
+    if (!typeMatches) return false;
   }
 
   return true;
 }
 
+/// returns an iterator by going deep into a prototype.
+function* iterableFromPrototype(parsedPrototype: ParsedPrototype) {
+  let currProto = parsedPrototype;
 
+  while (currProto) {
+    for (const arg of currProto.args) {
+      yield arg;
+    }
 
-export default argsMatchSyntax;
-
-export {
-  argsInRange
+    currProto = currProto.optional;
+  }
 }
+
+/// basic utility function to combine 2 Iterables. It exits when one runs out of output, 
+// regardless of the state of the other one.
+function* combineIter(
+  ...iters: Iterable<any>[]
+): Iterable<any[]> {
+  // Using raw iterator protocol since for loops can be frustrating
+  const rawIters = iters.map(iter => iter[Symbol.iterator]())
+
+  // values gained from rawIters
+  const items = rawIters.map(iter => iter.next())
+
+  // while no item is done i.e. it has more output  
+  while (items.every(item => !item.done)) {
+    yield items.map(item => item.value)
+
+    // moving iterators down to the next element
+    for (let i = 0; i < items.length; i++) {
+      items[i] = rawIters[i].next()
+    }
+  }
+}
+
+export default matchesPrototype;

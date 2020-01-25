@@ -1,8 +1,9 @@
-import argsMatchSyntax from './syntaxMatcher'
+import matchesPrototype from './syntaxMatcher'
 import isRestrictedChannel from './channelRestrictor'
 import { Message, Client, Collection } from 'discord.js'
 import { Command, Arg } from '../index'
 import { functionParser } from '../combinators/functions'
+import { prototypeParser } from '../combinators/prototype'
 
 
 async function runCommand(message: Message, client: Client, commands: Collection<string, Command>) {
@@ -22,7 +23,10 @@ async function runCommand(message: Message, client: Client, commands: Collection
     if (!commands.has(funcName)) return;
 
     const { syntax, channelType } = commands.get(funcName);
-    if (!argsMatchSyntax(args, syntax)) {
+
+    const parsedPrototype = prototypeParser.run(syntax)
+    
+    if (!matchesPrototype(args, parsedPrototype)) {
         message.reply(`Invalid syntax. Please use \`${funcName}(${syntax})\``)
         return;
     }
