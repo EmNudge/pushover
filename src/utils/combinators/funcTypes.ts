@@ -75,14 +75,17 @@ const link = sequenceOf([
 // user format:    <@!9070888758617457164>
 // role format:    <@&9070888758617457164>
 
-
-const asXML = between(char('<'))(char('>'))
+const asXML = between(char("<"))(char(">"));
 
 const channel = asXML(sequenceOf([char("#"), digits]).map(res => res[1]));
 
-const user = asXML(sequenceOf([char("!"), digits]).map(res => res[1]));
+const user = asXML(
+  sequenceOf([char("@"), char("!"), digits]).map(res => res[2])
+);
 
-const role = asXML(sequenceOf([char("&"), digits]).map(res => res[1]));
+const role = asXML(
+  sequenceOf([char("@"), char("&"), digits]).map(res => res[2])
+);
 
 export {
   variableName,

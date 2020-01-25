@@ -82,14 +82,12 @@ describe("Function Type Parsing", () => {
   });
 
   it("should parse channels, users, and roles", () => {
-    console.log({ channel, user, role })
     const res1 = channel.run(`<#907088875861745716>`);
-    // const res2 = user.run(`<@!9070888758617457164>`);
-    // const res3 = role.run(`<@&9070888758617457164>`);
+    const res2 = user.run(`<@!9070888758617457164>`);
+    const res3 = role.run(`<@&9070888758617457164>`);
 
-    console.log(res1)
     checkCombinator({ res: res1, expectedRes: `907088875861745716` });
-    // checkCombinator({ res: res2, expectedRes: `9070888758617457164` });
-    // checkCombinator({ res: res3, expectedRes: `9070888758617457164` });
+    checkCombinator({ res: res2, expectedRes: `9070888758617457164` });
+    checkCombinator({ res: res3, expectedRes: `9070888758617457164` });
   });
 });
