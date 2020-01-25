@@ -5,21 +5,21 @@ import { Type } from '../index'
 /// function parser interfaces. From least to most specific
 export interface FunctionArgument {
   type: Type;
-  value: String | Boolean | Number | ParsedFunction;
+  value: string | boolean | number | ParsedFunction;
 }
 export interface ParsedFunctionResult {
   name: string[];
   args: FunctionArgument[];
 }
 export interface ParsedFunction {
-  isError: Boolean;
-  error?: String;
+  isError: boolean;
+  error?: string;
   result: ParsedFunctionResult;
-  index: Number;
+  index: number;
   data: null;
 }
 export interface FunctionParser {
-  run: (String) => ParsedFunction;
+  run: (string) => ParsedFunction;
 }
 
 /// prototype parser interfaces. From least to most specific
@@ -32,14 +32,14 @@ export interface ParsedPrototypeResult {
   optional: null | ParsedPrototypeResult;
 }
 export interface ParsedPrototype {
-  isError: Boolean;
-  error?: String;
+  isError: boolean;
+  error?: string;
   result: ParsedPrototypeResult;
-  index: Number;
+  index: number;
   data: null;
 }
 export interface PrototypeParser {
-  run: (String) => ParsedPrototype;
+  run: (string) => ParsedPrototype;
 }
 
 export const functionParser = fp as FunctionParser;

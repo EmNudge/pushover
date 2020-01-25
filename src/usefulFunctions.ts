@@ -2,12 +2,6 @@ import { promisify } from 'util';
 import fs from 'fs';
 import { admins } from './firebaseConfig.js';
 
-//returns true if only one entry in the array fulfils the function.
-//returns false if all are false or more than one are true
-function onlyOne(array, func) {
-    return array.filter(func).length === 1;
-}
-
 //captializes the first letter in a string. Turns 'hello how are you' into 'Hello how are you'
 function capitalizeFirstLetter(word) {
     return word.substring(0, 1).toUpperCase() + word.slice(1);
@@ -47,16 +41,8 @@ async function setAdminFile() {
     await writeFile('./admins.json', JSON.stringify(adminObj));
 }
 
-//function to return an array of objects with the highest value
-function getMax(arrOfObjs, property) {
-    const highestVal = Math.max(...arrOfObjs.map(obj => obj[property]));
-    return arrOfObjs.filter(obj => obj[property] === highestVal);
-}
-
 export {
     capitalizeFirstLetter,
-    onlyOne,
     isNumber,
-    setAdminFile,
-    getMax
+    setAdminFile
 }
