@@ -6,9 +6,13 @@ import {
 	char,
 	sequenceOf,
 	many,
+	many1,
 	sepBy,
+	sepBy1,
 	anythingExcept,
 	str,
+	possibly,
+	anyOfString,
 } from "arcsecond";
 
 // takes a char to check for over a long string of text. Stops when it hits that char
@@ -45,24 +49,40 @@ const variableName = sequenceOf([letter, many(choice([letter, digit]))]).map(
 // allows this.Sort.OF.naming.SCHEME
 const funcName = sepBy(char('.'))(variableName)
 
+// a host is anything before the routes. This includes:
+// 'hello', 'site', and 'com' in hello.site.com.
+const urlHostChars = many(choice([
+	letter,
+	digit,
+	char('-'),
+])).map(res => res.join(''))
 
+// this just encompases all valid chars in a URL
+const urlChars = many(choice([
+	anyOfString('.?=#%&/'),
+	letter,
+	digit,
+])).map(res => res.join(''))
 
 const link = sequenceOf([
-	choice([
-		str('http'),
-		str('https')
-	]),
+	str('http'),
+	possibly(char('s')),
 	str('://'),
-	sepBy(char('.'))(
-		many(choice([
-			letter,
-			digit,
-			char('-'),
-		])),
-	)
+	urlHostChars,
+	char('.'),
+	urlHostChars,
+	urlChars,
+]).map(res => res.join(''))
 
-])
+// disallows leading or ending `-`. It is only allowed between chars
+const digitsOrLetters = many1(choice([letter, digit])).map(res => res.join(''))
+const channelName = sepBy1(char('-'))(digitsOrLetters).map(res => res.filter(Boolean).join('-'))
+
+const channel = sequenceOf([
+	char('#'),
+	channelName,
+]).map(res => res.join(''))
 
 
-export { variableName, funcName, string, boolean, number, link, enclosed };
+export { variableName, funcName, string, boolean, number, link, enclosed, channel };
   

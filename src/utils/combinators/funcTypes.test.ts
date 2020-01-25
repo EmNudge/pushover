@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { string, variableName, funcName, boolean } from './functions';
+import { string, variableName, funcName, boolean, link, channel } from './funcTypes';
 
 const checkCombinator = ({ res, shouldFail = false, expectedRes = res.result }) => {
   // should fail or not
@@ -46,6 +46,30 @@ describe('Function Type Parsing', () => {
 
     checkCombinator({ res: res1, expectedRes: true });
     checkCombinator({ res: res2, expectedRes: false });
+    checkCombinator({ res: res3, shouldFail: true });
+    checkCombinator({ res: res4, shouldFail: true });
+  });
+
+  it('should capture links', () => {
+    const res1 = link.run(`https://google.com`);
+    const res2 = link.run(`https://domains.google.com/site/?=%`);
+    const res3 = link.run(`http://1-1.org`);
+    const res4 = link.run(`google.com`);
+
+    checkCombinator({ res: res1, expectedRes: 'https://google.com' });
+    checkCombinator({ res: res2, expectedRes: `https://domains.google.com/site/?=%` });
+    checkCombinator({ res: res3, expectedRes: `http://1-1.org` });
+    checkCombinator({ res: res4, shouldFail: true });
+  });
+
+  it('should parse channel names', () => {
+    const res1 = channel.run(`#channel-name`);
+    const res2 = channel.run(`#42HELLO`);
+    const res3 = channel.run(`##`);
+    const res4 = channel.run(`#hello-`);
+
+    checkCombinator({ res: res1, expectedRes: `#channel-name` });
+    checkCombinator({ res: res2, expectedRes: `#42HELLO` });
     checkCombinator({ res: res3, shouldFail: true });
     checkCombinator({ res: res4, shouldFail: true });
   });
