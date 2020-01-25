@@ -8,11 +8,11 @@ const { token } = require("./config.json");
 const client = new Client();
 const commands = getCommands();
 
-client.on('ready', () => {
+client.on('ready', async  () => {
   console.log(`Logged in as ${client.user.tag}!`);
 
   //idk man, trying to advertise a bit.
-  client.user.setActivity("my code", { type: "STREAMING", url: "https://www.twitch.tv/emnudge" });
+  await client.user.setActivity("my code", { type: "STREAMING", url: "https://www.twitch.tv/emnudge" });
 
 	// setAdminFile();
   // reminder(client);

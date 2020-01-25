@@ -23,7 +23,7 @@
   },
   "scripts": {
     "main": "tsc && node dist/index.js",
-    "test": "mocha -r ts-node/register src/**/*.test.ts --require ts-node/register"
+    "test": "mocha -r ts-node/register src/**/*.test.ts"
   },
   "author": "EmNudge",
   "license": "ISC"
