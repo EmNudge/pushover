@@ -1,4 +1,5 @@
 import { ParsedFunctionResult, ParsedPrototypeResult } from "../combinators";
+import { combineIter } from '../general-utils/iterators'
 
 function matchesPrototype(
   parsedFunction: ParsedFunctionResult,
@@ -67,28 +68,6 @@ function* iterableFromPrototype(parsedPrototype: ParsedPrototypeResult) {
     }
 
     currProto = currProto.optional;
-  }
-}
-
-/// basic utility function to combine 2 Iterables. It exits when one runs out of output, 
-// regardless of the state of the other one.
-function* combineIter(
-  ...iters: Iterable<any>[]
-): Iterable<any[]> {
-  // Using raw iterator protocol since for loops can be frustrating
-  const rawIters = iters.map(iter => iter[Symbol.iterator]())
-
-  // values gained from rawIters
-  const items = rawIters.map(iter => iter.next())
-
-  // while no item is done i.e. it has more output  
-  while (items.every(item => !item.done)) {
-    yield items.map(item => item.value)
-
-    // moving iterators down to the next element
-    for (let i = 0; i < items.length; i++) {
-      items[i] = rawIters[i].next()
-    }
   }
 }
 
