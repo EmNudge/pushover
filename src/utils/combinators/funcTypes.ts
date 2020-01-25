@@ -14,6 +14,8 @@ import {
   between
 } from "arcsecond";
 
+import { Type } from "../index";
+
 // takes a char to check for over a long string of text. Stops when it hits that char
 const manyExcept = singleChar =>
   many(anythingExcept(char(singleChar))).map(res => res.join(""));
@@ -28,15 +30,15 @@ const enclosed = (start, mainParser, end = start) =>
 const string = choice([
   enclosed(char('"'), manyExcept('"')),
   enclosed(char("'"), manyExcept("'"))
-]);
+]).map(res => ({ type: Type.String, value: res }));
 
 // get true or false from 'true' and 'false'
 const boolean = choice([str("true"), str("false")]).map(res => {
-  if (res === "true") return true;
-  return false;
+  const value = res === "true";
+  return { type: Type.Boolean, value };
 });
 
-const number = digits.map(res => Number(res));
+const number = digits.map(res => ({ type: Type.Number, value: Number(res) }));
 
 // allows any combination of letters and numbers as long
 // as it starts with a letter
@@ -66,7 +68,7 @@ const link = sequenceOf([
   char("."),
   urlHostChars,
   urlChars
-]).map(res => res.join(""));
+]).map(res => ({ type: Type.Link, value: res.join("") }));
 
 // If a user types out a role, user, or channel out correctly,
 // it will look like this to the bot:
@@ -77,14 +79,19 @@ const link = sequenceOf([
 
 const asXML = between(char("<"))(char(">"));
 
-const channel = asXML(sequenceOf([char("#"), digits]).map(res => res[1]));
+const channel = asXML(
+  sequenceOf([char("#"), digits]).map(res => ({
+    type: Type.Channel,
+    value: res[1]
+  }))
+);
 
 const user = asXML(
-  sequenceOf([char("@"), char("!"), digits]).map(res => res[2])
+  sequenceOf([char("@"), char("!"), digits]).map(res => ({ type: Type.User, value: res[2] }))
 );
 
 const role = asXML(
-  sequenceOf([char("@"), char("&"), digits]).map(res => res[2])
+  sequenceOf([char("@"), char("&"), digits]).map(res => ({ type: Type.Role, value: res[2] }))
 );
 
 export {

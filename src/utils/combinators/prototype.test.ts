@@ -60,4 +60,45 @@ describe('Prototype Parsing', () => {
       }
     });
   })
+
+  it('should parse nested optional params', () => {
+    const res1 = prototypeParser.run('name: string[, age: number | string[, channel: channel]]')
+    const res2 = prototypeParser.run('name: string[, age: number | string, channel: channel]')
+
+    checkCombinator({ 
+      res: res1, 
+      expectedRes: { 
+        args: [
+          { name: 'name', types: [Type.String] },
+        ], 
+        optional: {
+          args: [
+            { name: 'age', types: [Type.Number, Type.String] },
+          ],
+          optional: {
+            args: [
+              { name: 'channel', types: [Type.Channel] },
+            ],
+            optional: null,
+          },
+        }
+      }
+    });
+
+    checkCombinator({ 
+      res: res2, 
+      expectedRes: { 
+        args: [
+          { name: 'name', types: [Type.String] },
+        ], 
+        optional: {
+          args: [
+            { name: 'age', types: [Type.Number, Type.String] },
+            { name: 'channel', types: [Type.Channel] },
+          ],
+          optional: null,
+        }
+      }
+    });
+  })
 });

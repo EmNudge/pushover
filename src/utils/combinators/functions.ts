@@ -7,8 +7,8 @@ import {
 	recursiveParser,
 } from "arcsecond";
 
-import { boolean, string, number, variableName, funcName } from './funcTypes'
-
+import { boolean, string, number, variableName, funcName, link, channel, user, role } from './funcTypes'
+import { Type } from '../index'
 
 const commaSeparator = sequenceOf([
 	optionalWhitespace,
@@ -22,7 +22,11 @@ const args = sepBy(commaSeparator)(choice([
 	string,
 	number,
 	boolean,
-	recursiveParser(() => functionParser)
+	channel,
+	user,
+	role,
+	link,
+	recursiveParser(() => functionParser).map(res => ({ type: Type.Function, value: res }))
 ]));
 
 // just allows ( these ), not really much more than that

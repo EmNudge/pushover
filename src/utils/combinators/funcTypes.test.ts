@@ -9,6 +9,7 @@ import {
   user,
   role
 } from "./funcTypes";
+import { Type } from "../index";
 
 const checkCombinator = ({
   res,
@@ -50,8 +51,14 @@ describe("Function Type Parsing", () => {
     const res1 = string.run(`" Hello this is a string!! "`);
     const res2 = string.run(`' Hello this is a "string!!" '`);
 
-    checkCombinator({ res: res1, expectedRes: " Hello this is a string!! " });
-    checkCombinator({ res: res2, expectedRes: ' Hello this is a "string!!" ' });
+    checkCombinator({
+      res: res1,
+      expectedRes: { type: Type.String, value: " Hello this is a string!! " }
+    });
+    checkCombinator({
+      res: res2,
+      expectedRes: { type: Type.String, value: ' Hello this is a "string!!" ' }
+    });
   });
 
   it("should capture booleans", () => {
@@ -60,8 +67,14 @@ describe("Function Type Parsing", () => {
     const res3 = boolean.run(`True`);
     const res4 = boolean.run(`False`);
 
-    checkCombinator({ res: res1, expectedRes: true });
-    checkCombinator({ res: res2, expectedRes: false });
+    checkCombinator({
+      res: res1,
+      expectedRes: { type: Type.Boolean, value: true }
+    });
+    checkCombinator({
+      res: res2,
+      expectedRes: { type: Type.Boolean, value: false }
+    });
     checkCombinator({ res: res3, shouldFail: true });
     checkCombinator({ res: res4, shouldFail: true });
   });
@@ -72,12 +85,21 @@ describe("Function Type Parsing", () => {
     const res3 = link.run(`http://1-1.org`);
     const res4 = link.run(`google.com`);
 
-    checkCombinator({ res: res1, expectedRes: "https://google.com" });
+    checkCombinator({
+      res: res1,
+      expectedRes: { type: Type.Link, value: "https://google.com" }
+    });
     checkCombinator({
       res: res2,
-      expectedRes: `https://domains.google.com/site/?=%`
+      expectedRes: {
+        type: Type.Link,
+        value: `https://domains.google.com/site/?=%`
+      }
     });
-    checkCombinator({ res: res3, expectedRes: `http://1-1.org` });
+    checkCombinator({
+      res: res3,
+      expectedRes: { type: Type.Link, value: `http://1-1.org` }
+    });
     checkCombinator({ res: res4, shouldFail: true });
   });
 
@@ -86,8 +108,17 @@ describe("Function Type Parsing", () => {
     const res2 = user.run(`<@!9070888758617457164>`);
     const res3 = role.run(`<@&9070888758617457164>`);
 
-    checkCombinator({ res: res1, expectedRes: `907088875861745716` });
-    checkCombinator({ res: res2, expectedRes: `9070888758617457164` });
-    checkCombinator({ res: res3, expectedRes: `9070888758617457164` });
+    checkCombinator({
+      res: res1,
+      expectedRes: { type: Type.Channel, value: `907088875861745716` }
+    });
+    checkCombinator({
+      res: res2,
+      expectedRes: { type: Type.User, value: `9070888758617457164` }
+    });
+    checkCombinator({
+      res: res3,
+      expectedRes: { type: Type.Role, value: `9070888758617457164` }
+    });
   });
 });

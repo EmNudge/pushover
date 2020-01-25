@@ -1,7 +1,8 @@
 export enum Type {
   String = "string",
-  Function = "function",
   Number = "number",
+  Boolean = "boolean",
+  Function = "function",
   ID = "id",
   Link = "link",
   Channel = "channel",
