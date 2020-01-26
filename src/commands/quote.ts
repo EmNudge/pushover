@@ -1,12 +1,13 @@
 import { RichEmbed, Message, Client, TextChannel, DMChannel } from 'discord.js';
 import { Type } from '../utils/index'
 import { FunctionArgument } from '../utils/combinators'
+import { client } from '../index'
 
 export default {
 	name: 'quote',
 	description: 'quotes a specific user based on a link ID',
 	syntax: `messageLink: ${Type.Link}`,
-	async execute(message: Message, args: FunctionArgument[], client: Client) {
+	async execute(message: Message, args: FunctionArgument[]) {
 		const quoteEmbed = new RichEmbed().setColor('#1C8CFF');
 		const link = args[0].value as string;
 

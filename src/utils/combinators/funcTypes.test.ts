@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import {
   string,
-  variableName,
+  variable,
   funcName,
   boolean,
   link,
@@ -29,10 +29,10 @@ const checkCombinator = ({
 
 describe("Function Type Parsing", () => {
   it("should parse variable names correctly", () => {
-    const res1 = variableName.run("c00lKid");
-    const res2 = variableName.run("0hMan");
+    const res1 = variable.run("c00lKid");
+    const res2 = variable.run("0hMan");
 
-    checkCombinator({ res: res1, expectedRes: "c00lKid" });
+    checkCombinator({ res: res1, expectedRes: { type: Type.Variable, value: "c00lKid" } });
     checkCombinator({ res: res2, shouldFail: true });
   });
 

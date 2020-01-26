@@ -40,9 +40,9 @@ describe('Prototype Parsing', () => {
 	});
 
 	it('can parse all types', () => {
-    const res1 = prototypeParser.run('a: number | string | boolean | function | channel | link | user | role');
+    const res1 = prototypeParser.run('a: number | string | boolean | function | variable | channel | link | user | role');
 		const res2 = prototypeParser.run(
-			'a: number, b: string, c: boolean, d: function, e: channel, f: link, g: user, h: role'
+			'a: number, b: string, c: boolean, d: function, e: variable, f: channel, g: link, h: user, i: role'
 		);
 
 		checkCombinator({
@@ -56,6 +56,7 @@ describe('Prototype Parsing', () => {
 							Type.String,
 							Type.Boolean,
 							Type.Function,
+							Type.Variable,
 							Type.Channel,
 							Type.Link,
 							Type.User,
@@ -75,10 +76,11 @@ describe('Prototype Parsing', () => {
 					{ name: 'b', types: [Type.String] },
 					{ name: 'c', types: [Type.Boolean] },
 					{ name: 'd', types: [Type.Function] },
-					{ name: 'e', types: [Type.Channel] },
-					{ name: 'f', types: [Type.Link] },
-					{ name: 'g', types: [Type.User] },
-					{ name: 'h', types: [Type.Role] }
+					{ name: 'e', types: [Type.Variable] },
+					{ name: 'f', types: [Type.Channel] },
+					{ name: 'g', types: [Type.Link] },
+					{ name: 'h', types: [Type.User] },
+					{ name: 'i', types: [Type.Role] }
 				],
 				optional: null
 			}

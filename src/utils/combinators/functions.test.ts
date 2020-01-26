@@ -34,7 +34,7 @@ describe("Function Parsing", () => {
   });
 
   it("should work with all types", () => {
-    const res1 = args.run('1234, "string", true, false');
+    const res1 = args.run('1234, "string", bigBoy, true, false');
     const res2 = args.run(`https://google.com, <#907088875861745716>`);
     const res3 = args.run(`<@!9070888758617457164>, <@&9070888758617457164>`);
 
@@ -43,6 +43,7 @@ describe("Function Parsing", () => {
       expectedRes: [
         { type: Type.Number, value: 1234 },
         { type: Type.String, value: "string" },
+        { type: Type.Variable, value: "bigBoy" },
         { type: Type.Boolean, value: true },
         { type: Type.Boolean, value: false }
       ]
@@ -97,6 +98,8 @@ describe("Function Parsing", () => {
     const res = functionParser.run(
       'killMe  ( killMe(32), "what is up?!", true )  '
     );
+
+    console.log({res})
 
     checkCombinator({
       res,
