@@ -23,7 +23,8 @@
   },
   "scripts": {
     "main": "tsc && node dist/index.js",
-    "test": "mocha -r ts-node/register src/**/*.test.ts"
+    "test": "mocha -r ts-node/register src/**/*.test.ts",
+    "mocha-debug": "mocha -r ts-node/register --inspect-brk  src/**/*.test.ts"
   },
   "author": "EmNudge",
   "license": "ISC"

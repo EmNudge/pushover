@@ -24,7 +24,7 @@ function matchesAnyLength(
   let currProto = parsedPrototype;
   let len = 0;
 
-  while (currProto && parsedFunctionLength > len) {
+  while (currProto && parsedFunctionLength >= len) {
     len += currProto.args.length;
 
     // matches this level of arguments
