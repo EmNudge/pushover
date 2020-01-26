@@ -17,7 +17,7 @@ export default {
 			return;
 		}
 
-		const commandName = args[0].value as string;
+		const commandName = (args[0].value as string[]).join('.');
 
 		if (!commands.has(commandName)) {
 			message.reply(`that is not a valid command`);

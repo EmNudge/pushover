@@ -30,7 +30,6 @@ export async function runCommand(message: Message, parsedFunc: ParsedFunctionRes
     const parsedPrototype = prototypeParser.run(syntax).result
     
     if (!matchesPrototype(parsedFunc, parsedPrototype)) {
-        console.log({ parsedFunc, parsedPrototype })
         message.reply(`Invalid syntax. Please use \`${funcName}(${syntax})\``)
         return;
     }
