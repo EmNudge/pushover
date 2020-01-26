@@ -1,11 +1,10 @@
 import matchesPrototype from './syntaxMatcher'
 import isRestrictedChannel from './channelRestrictor'
-import { Message, Client, Collection } from 'discord.js'
-import { Command } from '../index'
-import { prototypeParser, functionParser } from '../combinators/'
+import { Message } from 'discord.js'
+import { prototypeParser, functionParser, ParsedFunctionResult } from '../combinators/'
+import { client, commands } from '../../index'
 
-
-async function runCommand(message: Message, client: Client, commands: Collection<string, Command>) {
+export async function parseAndRun(message: Message) {
     // first a dirty check to see if it has a closing paren
     // can't check opening since parser allows for whitespace which is hard to check for
     // without a parser. Cheaper to just let the parser handle it from here.
@@ -16,8 +15,11 @@ async function runCommand(message: Message, client: Client, commands: Collection
 
     if (parserFunc.isError) return;
 
-    // name: string[], args: string[]
-    const { name, args } = parserFunc.result
+    await runCommand(message, parserFunc.result)
+}
+
+export async function runCommand(message: Message, parsedFunc: ParsedFunctionResult) {
+    const { name, args } = parsedFunc;
     const funcName = name.join('.')
 
     //if the command name isn't valid, ignore
@@ -27,7 +29,8 @@ async function runCommand(message: Message, client: Client, commands: Collection
 
     const parsedPrototype = prototypeParser.run(syntax).result
     
-    if (!matchesPrototype(parserFunc.result, parsedPrototype)) {
+    if (!matchesPrototype(parsedFunc, parsedPrototype)) {
+        console.log({ parsedFunc, parsedPrototype })
         message.reply(`Invalid syntax. Please use \`${funcName}(${syntax})\``)
         return;
     }
@@ -38,7 +41,7 @@ async function runCommand(message: Message, client: Client, commands: Collection
     
     //if all tests pass, try to run the command
     try {
-		commands.get(funcName).execute(message, args.map(arg => arg.value), client);
+		commands.get(funcName).execute(message, args, client);
 	} catch (error) {
 		console.error(error);
 		message.reply('Whoops! Error occurred!');

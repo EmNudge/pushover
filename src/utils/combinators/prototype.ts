@@ -19,6 +19,8 @@ import { enclosed } from './funcTypes'
 const typeToEnum = {
 	number: Type.Number,
 	string: Type.String,
+	boolean: Type.Boolean,
+	function: Type.Function,
 	channel: Type.Channel,
 	link: Type.Link,
 	user: Type.User,
@@ -31,6 +33,8 @@ const typeToEnum = {
 const type = choice([
 	str('number'),
 	str('string'),
+	str('boolean'),
+	str('function'),
 	str('channel'),
 	str('link'),
 	str('user'),

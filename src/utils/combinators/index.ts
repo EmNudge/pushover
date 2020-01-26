@@ -5,7 +5,7 @@ import { Type } from '../index'
 /// function parser interfaces. From least to most specific
 export interface FunctionArgument {
   type: Type;
-  value: string | boolean | number | ParsedFunction;
+  value: string | boolean | number | ParsedFunctionResult;
 }
 export interface ParsedFunctionResult {
   name: string[];

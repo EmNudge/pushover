@@ -10,11 +10,6 @@ export enum Type {
   User = "user"
 }
 
-export interface Arg {
-  type: Type,
-  value: string,
-}
-
 export interface Command {
   name: string;
   description: string;

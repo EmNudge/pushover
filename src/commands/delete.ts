@@ -1,24 +1,21 @@
 import { Type } from '../utils/index'
-import runCommand from '../utils/run'
-import getCommands from '../utils/getCommands'
-import { Message, Client } from 'discord.js'
+import {runCommand} from '../utils/run'
+import { Message } from 'discord.js'
+import { FunctionArgument, ParsedFunctionResult } from '../utils/combinators'
 
 export default {
 	name: 'delete',
 	description: 'runs a command and deletes the user message once the command is complete',
-	syntax: `command(params): ${Type.Function}`,
-	async execute(message: Message, args: string[], client: Client) {
+	syntax: `calledFunctionWithArgs: ${Type.Function}`,
+	async execute(message: Message, args: FunctionArgument[]) {
 		//delete the command. The entire point of this function
 		if (message.deletable) {
-			message.delete();
+			await message.delete();
 		} else {
-			message.channel.send(`I do not have delete permissions.`);
+			await message.channel.send(`I do not have delete permissions.`);
 			return;
 		}
 
-		//a bit hacky, but slightly changes the context of this message object by changing the content
-		message.content = args[0];
-
-		await runCommand(message, client, getCommands());
+		await runCommand(message, args[0].value as ParsedFunctionResult);
 	},
 };

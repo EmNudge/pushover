@@ -1,25 +1,26 @@
-import { Client } from 'discord.js'
-import getCommands from './utils/getCommands'
-import runCommand from './utils/run'
-const { token } = require("./config.json");
+import { Client } from 'discord.js';
+import getCommands from './utils/getCommands';
+import { parseAndRun } from './utils/run';
+const { token } = require('./config.json');
 // const { setAdminFile } = require('./usefulFunctions.js');
 // const reminder = require('./reminder.js');
 
-const client = new Client();
-const commands = getCommands();
+// Yes, we are exporting from index. It's weird, I know.
+export const client = new Client();
+export const commands = getCommands();
 
-client.on('ready', async  () => {
-  console.log(`Logged in as ${client.user.tag}!`);
+client.on('ready', async () => {
+	console.log(`Logged in as ${client.user.tag}!`);
 
-  //idk man, trying to advertise a bit.
-  await client.user.setActivity("my code", { type: "STREAMING", url: "https://www.twitch.tv/emnudge" });
+	//idk man, trying to advertise a bit.
+	await client.user.setActivity('my code', { type: 'STREAMING', url: 'https://www.twitch.tv/emnudge' });
 
 	// setAdminFile();
-  // reminder(client);
+	// reminder(client);
 });
 
-client.on('message', async message => {
-	await runCommand(message, client, commands);
+client.on('message', async (message) => {
+	await parseAndRun(message);
 });
 
 client.on('error', console.error);
