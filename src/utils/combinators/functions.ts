@@ -7,7 +7,7 @@ import {
 	recursiveParser,
 } from "arcsecond";
 
-import { boolean, string, number, variable, funcName, link, channel, user, role } from './funcTypes'
+import { boolean, string, number, funcName, link, channel, user, role } from './funcTypes'
 import { Type } from '../index'
 
 const commaSeparator = sequenceOf([
@@ -25,8 +25,8 @@ const args = sepBy(commaSeparator)(choice([
 	user,
 	role,
 	link,
-	recursiveParser(() => functionParser).map(res => ({ type: Type.Function, value: res })),
-	variable,
+	recursiveParser(() => functionParser).map(res => ({ type: Type.Executable, value: res })),
+	funcName,
 ]));
 
 // just allows ( these ), not really much more than that
@@ -40,7 +40,7 @@ const argsInParens = sequenceOf([
 
 
 const functionParser = sequenceOf([funcName, optionalWhitespace, argsInParens]).map(res => ({
-	name: res[0],
+	name: res[0].value,
 	args: res[2]
 }));
 

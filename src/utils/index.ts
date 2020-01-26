@@ -3,7 +3,7 @@ export enum Type {
   Number = "number",
   Boolean = "boolean",
   Function = "function",
-  Variable = "variable",
+  Executable = "executable",
   ID = "id",
   Link = "link",
   Channel = "channel",

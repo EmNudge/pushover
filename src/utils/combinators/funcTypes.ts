@@ -6,7 +6,7 @@ import {
 	char,
 	sequenceOf,
 	many,
-	sepBy,
+	sepBy1,
 	anythingExcept,
 	str,
 	possibly,
@@ -43,13 +43,7 @@ const number = digits.map((res) => ({ type: Type.Number, value: Number(res) }));
 const command = sequenceOf([letter, many(choice([letter, digit]))]).map((res) => res[0] + res[1].join(''));
 
 // allows this.Sort.OF.naming.SCHEME
-const funcName = sepBy(char('.'))(command);
-
-// copying command, but we need to map it do a different data structure, so we can't reuse it.
-const variable = sequenceOf([letter, many(choice([letter, digit]))]).map((res) => ({
-	value: res[0] + res[1].join(''),
-	type: Type.Variable
-}));
+const funcName = sepBy1(char('.'))(command).map(res => ({ type: Type.Function, value: res }));
 
 // a host is anything before the routes. This includes:
 // 'hello', 'site', and 'com' in hello.site.com.
@@ -88,4 +82,4 @@ const user = asXML(sequenceOf([char('@'), char('!'), digits]).map((res) => ({ ty
 
 const role = asXML(sequenceOf([char('@'), char('&'), digits]).map((res) => ({ type: Type.Role, value: res[2] })));
 
-export { variable, funcName, string, boolean, number, link, enclosed, channel, user, role };
+export { funcName, string, boolean, number, link, enclosed, channel, user, role };

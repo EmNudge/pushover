@@ -43,7 +43,7 @@ describe("Function Parsing", () => {
       expectedRes: [
         { type: Type.Number, value: 1234 },
         { type: Type.String, value: "string" },
-        { type: Type.Variable, value: "bigBoy" },
+        { type: Type.Function, value: ["bigBoy"] },
         { type: Type.Boolean, value: true },
         { type: Type.Boolean, value: false }
       ]
@@ -94,12 +94,24 @@ describe("Function Parsing", () => {
     });
   });
 
+  it("should parse an empty function", () => {
+    const res = functionParser.run('emptyFunction()');
+
+    debugger;
+
+    checkCombinator({
+      res,
+      expectedRes: {
+        name: ["emptyFunction"],
+        args: []
+      }
+    });
+  });
+
   it("should parse a function recursively", () => {
     const res = functionParser.run(
       'killMe  ( killMe(32), "what is up?!", true )  '
     );
-
-    console.log({res})
 
     checkCombinator({
       res,
@@ -107,7 +119,7 @@ describe("Function Parsing", () => {
         name: ["killMe"],
         args: [
           {
-            type: Type.Function,
+            type: Type.Executable,
             value: {
               name: ["killMe"],
               args: [{ type: Type.Number, value: 32 }]

@@ -15,7 +15,6 @@ describe('Syntax Matching', () => {
 		const matches2 = matchesPrototype(parsedFunction2, parsedPrototype1);
     debugger;
     const matches3 = matchesPrototype(parsedFunction3, parsedPrototype2);
-    
 
 		expect(matches1).to.true;
 		expect(matches2).to.true;

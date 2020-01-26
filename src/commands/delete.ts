@@ -6,7 +6,7 @@ import { FunctionArgument, ParsedFunctionResult } from '../utils/combinators'
 export default {
 	name: 'delete',
 	description: 'runs a command and deletes the user message once the command is complete',
-	syntax: `calledFunctionWithArgs: ${Type.Function}`,
+	syntax: `calledFunctionWithArgs: ${Type.Executable}`,
 	async execute(message: Message, args: FunctionArgument[]) {
 		//delete the command. The entire point of this function
 		if (message.deletable) {

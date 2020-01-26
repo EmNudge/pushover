@@ -1,16 +1,23 @@
-import { Type } from '../utils/index'
+import { Type } from '../utils/index';
 import { RichEmbed, Message } from 'discord.js';
-import { FunctionArgument } from '../utils/combinators'
-import { commands } from '../index'
+import { FunctionArgument } from '../utils/combinators';
+import { commands } from '../index';
 
 export default {
 	name: 'help',
-	description: 'returns the descriptor for a command',
-	syntax: `commandName: ${Type.String} | ${Type.Variable}`,
+	description: 'Returns the descriptor for a command. \nWill list commands if no argument is present.',
+	syntax: `[commandName: ${Type.String} | ${Type.Function}]`,
 	async execute(message: Message, args: FunctionArgument[]) {
-		const commandName = args[0].value as string;
+		if (!args.length) {
+			const embed = new RichEmbed().setColor('#1C8CFF');
+			const cmds = [...commands.keys()].filter(cmd => !cmd.startsWith('ADMIN')).join(', ')
+			embed.setTitle('Commands').setDescription(cmds)
 
-		console.log({commandName})
+			await message.channel.send(embed);
+			return;
+		}
+
+		const commandName = args[0].value as string;
 
 		if (!commands.has(commandName)) {
 			message.reply(`that is not a valid command`);
@@ -19,11 +26,11 @@ export default {
 
 		const { description, syntax } = commands.get(commandName);
 
-		const meetingEmbed = new RichEmbed().setColor('#1C8CFF');
-		//add line for syntax if there is a syntax property
-		const embedDescription = `**description**: ${description}\n**syntax**: ${commandName}(${syntax})`;
-		meetingEmbed.setTitle(commandName).setDescription(embedDescription);
+		const helpEmbed = new RichEmbed().setColor('#1C8CFF');
 
-		await message.channel.send(meetingEmbed);
-	},
+		const embedDescription = [description, '', `**syntax**: ${commandName}(${syntax})`].join('\n');
+		helpEmbed.setTitle(commandName).setDescription(embedDescription);
+
+		await message.channel.send(helpEmbed);
+	}
 };
