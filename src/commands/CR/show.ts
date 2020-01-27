@@ -1,4 +1,4 @@
-import { customReponses } from '../../firebaseConfig';
+import responsesDb from '../../db/responses.json';
 import { Message, RichEmbed } from 'discord.js';
 
 module.exports = {
@@ -6,15 +6,23 @@ module.exports = {
   description: 'retrieve all responses',
   syntax: '',
 	async execute(message: Message) {
-    const responsesEmbed = new RichEmbed().setColor('#1C8CFF').setTitle('Custom Responses');
-    const dbResponses = await customReponses.doc(message.guild.id).get();
+    const guild = responsesDb[message.guild.id]
 
-    let embedText = '';
-    for (const response of dbResponses.data().responses) {
-      embedText += `* ${response.trigger}: ${response.response}\n`;
+    if (!guild || !Object.keys(guild).length) {
+      await message.channel.send('There are no triggers set for this server');
+      return;
     }
-    responsesEmbed.setDescription(embedText);
 
-    message.channel.send(responsesEmbed);
+    const responsesEmbed = new RichEmbed().setColor('#1C8CFF').setTitle('Custom Responses');
+
+    const embedText = [];
+    for (const name of Object.keys(guild)) {
+      const response = guild[name]
+      embedText.push(`* ${name}: ${response}`)
+    }
+
+    responsesEmbed.setDescription(embedText.join('\n'));
+
+    await message.channel.send(responsesEmbed);
 	},
 };

@@ -19,7 +19,7 @@ export interface ParsedFunction {
   data: null;
 }
 export interface FunctionParser {
-  run: (string) => ParsedFunction;
+  run: (arg: string) => ParsedFunction;
 }
 
 /// prototype parser interfaces. From least to most specific
@@ -39,7 +39,7 @@ export interface ParsedPrototype {
   data: null;
 }
 export interface PrototypeParser {
-  run: (string) => ParsedPrototype;
+  run: (arg: string) => ParsedPrototype;
 }
 
 export const functionParser = fp as FunctionParser;

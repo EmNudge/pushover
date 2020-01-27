@@ -1,24 +1,27 @@
-import { customReponses } from '../../firebaseConfig';
+import { FunctionArgument } from '../../utils/combinators';
+import responsesDb from '../../db/responses.json';
 import { Message } from 'discord.js';
 
 module.exports = {
 	name: 'get',
-  description: 'retrieve a custom response',
-  syntax: 'responseName',
-	async execute(message: Message, args: string[]) {
-    const dbResponses = await customReponses.doc(message.guild.id).get();
-    const responses = dbResponses.data().responses;
-    if (!responses.some(response => response.trigger == args[0])) {
-      message.channel.send(`${message.author} that is not a valid trigger.`)
-    }
+	description: 'retrieve a custom response',
+	syntax: 'responseName: string',
+	async execute(message: Message, args: FunctionArgument[]) {
+    const guild = responsesDb[message.guild.id];
+    
+		if (!guild) {
+			await message.channel.send('This server has not yet set any custom messages');
+			return;
+		}
 
-    let botResponse;
-    for (const [index, response] of responses.entries()) {
-      if (response.trigger != args[0]) continue;
-      botResponse = responses[index].response;
-      break;
-    }
+		const name = args[0].value as string;
+		const response = guild[name];
 
-    message.channel.send(`${botResponse}`);
-	},
+		if (!response) {
+			await message.channel.send('That trigger has no associated response set.');
+			return;
+		}
+
+		await message.channel.send(response);
+	}
 };

@@ -1,27 +1,22 @@
-import { customReponses } from '../../firebaseConfig.js';
+import { FunctionArgument } from '../../utils/combinators';
+import responsesDb from '../../db/responses.json';
 import { Message } from 'discord.js';
 
 module.exports = {
 	name: 'delete',
-  description: 'delete a custom response',
-  syntax: 'responseName',
-	async execute(message: Message, args: string[]) {
-    const dbResponses = await customReponses.doc(message.guild.id).get();
-    const responses = dbResponses.data().responses;
+	description: 'delete a custom response',
+	syntax: 'responseName: string',
+	async execute(message: Message, args: FunctionArgument[]) {
+		const name = args[0].value as string;
 
-    if (!responses.some(response => response.trigger == args[0]) || typeof responses == "undefined") {
-      message.channel.send(`The trigger **${args[0]}** does not currently exist`);
-      return;
-    }
+		const guild = responsesDb[message.guild.id];
+		if (!guild) {
+			await message.channel.send('This server has not yet set any custom messages');
+			return;
+		}
 
-    for (const [index, response] of responses.entries()) {
-      if (response.trigger != args[0]) continue;
-      responses.splice(index, 1);
-      break;
-    }
+		delete guild[name];
 
-    await customReponses.doc(message.guild.id).set({ responses });
-
-    message.channel.send(`The trigger **${args[0]}** has been deleted`);
-	},
+		message.channel.send(`The trigger **${name}** has been deleted`);
+	}
 };
