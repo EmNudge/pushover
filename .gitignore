@@ -3,3 +3,4 @@ config.json
 dist/
 .nyc_output
 npm-debug.log
+example

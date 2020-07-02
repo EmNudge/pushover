@@ -1,4 +1,4 @@
-import { RichEmbed, Message, Client, TextChannel, DMChannel } from 'discord.js';
+import { RichEmbed, Message, TextChannel, DMChannel } from 'discord.js';
 import { Type } from '../utils/index'
 import { FunctionArgument } from '../utils/combinators'
 import { client } from '../index'

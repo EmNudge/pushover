@@ -5,10 +5,12 @@
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "strict": false,
-        "module": "CommonJS",
-        "outDir": "dist"
+        "module": "CommonJS"
     },
     "include": [
-        "src/**/*"
+        "src/**/*", "rollup.config.js"
+    ],
+    "exclude": [
+        "example/**/*"
     ]
 }
